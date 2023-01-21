@@ -1,0 +1,6 @@
+**/__pycache__/
+/bot/data
+draft.py
+*.db
+.idea
+*.log

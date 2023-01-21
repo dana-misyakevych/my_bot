@@ -1,0 +1,161 @@
+# English translations for PROJECT.
+# Copyright (C) 2023 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2023-01-19 00:59+0200\n"
+"PO-Revision-Date: 2023-01-17 14:20+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: en\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.11.0\n"
+
+#: bot/data/texts.py:3
+msgid ""
+"\n"
+"Greetings! To work with the bot, just drop the link\n"
+"for the product you are interested in\n"
+"\n"
+"The following commands are also available to you:\n"
+"<b>/start</b> - <em>Getting started with the bot</em>\n"
+"<b>/cart</b> - <em>List of products you are following</em>\n"
+"<b>/language</b> - <em>Language</em>\n"
+"<b>/stores</b> - <em>List of available stores</em>"
+msgstr ""
+
+#: bot/data/texts.py:13
+msgid "Just a link enough 😤"
+msgstr ""
+
+#: bot/data/texts.py:14
+msgid "Can I just get a link? 🥺"
+msgstr ""
+
+#: bot/data/texts.py:15
+msgid "Hmm, let's try to just throw a link? 🤔"
+msgstr ""
+
+#: bot/data/texts.py:16
+msgid "It seems enough just to drop the link🤓"
+msgstr ""
+
+#: bot/data/texts.py:21
+msgid "The product has been tracked"
+msgstr ""
+
+#: bot/data/texts.py:22
+msgid "Started tracking the product"
+msgstr ""
+
+#: bot/data/texts.py:23
+msgid "Tracked the product"
+msgstr ""
+
+#: bot/data/texts.py:24
+msgid "Added the product to tracking system"
+msgstr ""
+
+#: bot/data/texts.py:25
+msgid "Tracked the product's progress"
+msgstr ""
+
+#: bot/data/texts.py:26
+msgid "A product tracking system has been set up"
+msgstr ""
+
+#: bot/data/texts.py:27 bot/misc/functions.py:39
+msgid "Started following 🫡"
+msgstr ""
+
+#: bot/handlers/user/callback.py:28 bot/handlers/user/callback.py:30
+msgid "Done!"
+msgstr ""
+
+#: bot/handlers/user/callback.py:40
+msgid "You don't have this product🧐"
+msgstr ""
+
+#: bot/handlers/user/command.py:27
+msgid "Shops are available: "
+msgstr ""
+
+#: bot/handlers/user/command.py:37
+msgid "Your cart is empty 🧐"
+msgstr ""
+
+#: bot/handlers/user/command.py:40
+msgid "Here's your shopping cart:"
+msgstr ""
+
+#: bot/handlers/user/command.py:61 bot/middlewares/user.py:46
+msgid "Something went wrong 😮‍💨, try again later"
+msgstr ""
+
+#: bot/keyboards/custom_keyboards.py:61 bot/keyboards/custom_keyboards.py:80
+msgid "Keep"
+msgstr ""
+
+#: bot/keyboards/custom_keyboards.py:62 bot/keyboards/custom_keyboards.py:81
+msgid "Delete🙇‍♂️"
+msgstr ""
+
+#: bot/keyboards/custom_keyboards.py:71
+msgid "Delete"
+msgstr ""
+
+#: bot/keyboards/custom_keyboards.py:72
+msgid "Buy"
+msgstr ""
+
+#: bot/middlewares/user.py:36
+msgid "Unavailable command"
+msgstr ""
+
+#: bot/misc/functions.py:34
+msgid "Already following 😎"
+msgstr ""
+
+#: bot/misc/scheduler.py:41
+msgid "The price of selected products has changed"
+msgstr ""
+
+#: bot/misc/scheduler.py:78
+msgid "Hello, select the products you are still following, Or leave it as it is"
+msgstr ""
+
+#: bot/utils/set_commands.py:8
+msgid "Список товарів"
+msgstr ""
+
+#: bot/utils/set_commands.py:9
+msgid "Підказки"
+msgstr ""
+
+#: bot/utils/set_commands.py:10
+msgid "Мова"
+msgstr ""
+
+#: bot/utils/set_commands.py:11
+msgid "Список доступних крамниць"
+msgstr ""
+
+#~ msgid "order-name"
+#~ msgstr ""
+
+#~ msgid "New prices"
+#~ msgstr ""
+
+#~ msgid "Hello"
+#~ msgstr ""
+
+#~ msgid "Початок роботи"
+#~ msgstr ""
+

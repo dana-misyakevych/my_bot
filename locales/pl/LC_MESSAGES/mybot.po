@@ -1,0 +1,170 @@
+# Polish translations for PROJECT.
+# Copyright (C) 2023 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2023-01-19 00:59+0200\n"
+"PO-Revision-Date: 2023-01-19 11:15+0200\n"
+"Last-Translator: \n"
+"Language: pl\n"
+"Language-Team: pl <LL@li.org>\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && "
+"(n%100<10 || n%100>=20) ? 1 : 2);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.11.0\n"
+
+#: bot/data/texts.py:3
+msgid ""
+"\n"
+"Greetings! To work with the bot, just drop the link\n"
+"for the product you are interested in\n"
+"\n"
+"The following commands are also available to you:\n"
+"<b>/start</b> - <em>Getting started with the bot</em>\n"
+"<b>/cart</b> - <em>List of products you are following</em>\n"
+"<b>/language</b> - <em>Language</em>\n"
+"<b>/stores</b> - <em>List of available stores</em>"
+msgstr ""
+"\n"
+"Pozdrawiam!!! Aby pracować z botem, wystarczy podrzucić link\n"
+"do produktu, którym jesteś zainteresowany\n"
+"\n"
+"Do dyspozycji masz również następujące komendy:\n"
+"<b>/start</b> - Rozpoczęcie pracy <em>z botem</em>\n"
+"<b>/cart</b> - <em>Lista produktów, które śledzisz</em>\n"
+"<b>/language</b> - <em>Język</em>\n"
+"<b>/stores</b> - Lista <em>dostępnych sklepów</em>"
+
+#: bot/data/texts.py:13
+msgid "Just a link enough 😤"
+msgstr "Wystarczy link 😤"
+
+#: bot/data/texts.py:14
+msgid "Can I just get a link? 🥺"
+msgstr "Czy mogę dostać tylko link? 🥺"
+
+#: bot/data/texts.py:15
+msgid "Hmm, let's try to just throw a link? 🤔"
+msgstr "Hmm, spróbujmy po prostu wrzucić jakiś link? 🤔"
+
+#: bot/data/texts.py:16
+msgid "It seems enough just to drop the link🤓"
+msgstr "Wydaje się, że wystarczy tylko podrzucić link🤓"
+
+#: bot/data/texts.py:21
+msgid "The product has been tracked"
+msgstr "Zaczęto śledzić 🫡"
+
+#: bot/data/texts.py:22
+msgid "Started tracking the product"
+msgstr "Zaczęto śledzić 🫡"
+
+#: bot/data/texts.py:23
+msgid "Tracked the product"
+msgstr "Zaczęto śledzić 🫡"
+
+#: bot/data/texts.py:24
+msgid "Added the product to tracking system"
+msgstr "Zaczęto śledzić 🫡"
+
+#: bot/data/texts.py:25
+msgid "Tracked the product's progress"
+msgstr "Zaczęto śledzić 🫡"
+
+#: bot/data/texts.py:26
+msgid "A product tracking system has been set up"
+msgstr "Zaczęto śledzić 🫡"
+
+#: bot/data/texts.py:27 bot/misc/functions.py:39
+msgid "Started following 🫡"
+msgstr "Zaczęto śledzić 🫡"
+
+#: bot/handlers/user/callback.py:28 bot/handlers/user/callback.py:30
+msgid "Done!"
+msgstr "Gotowe!"
+
+#: bot/handlers/user/callback.py:40
+msgid "You don't have this product🧐"
+msgstr "Nie masz tego produktu🧐"
+
+#: bot/handlers/user/command.py:27
+msgid "Shops are available: "
+msgstr "Dostępne są sklepy: "
+
+#: bot/handlers/user/command.py:37
+msgid "Your cart is empty 🧐"
+msgstr "Twój koszyk jest pusty 🧐"
+
+#: bot/handlers/user/command.py:40
+msgid "Here's your shopping cart:"
+msgstr "Oto twój koszyk:"
+
+#: bot/handlers/user/command.py:61 bot/middlewares/user.py:46
+msgid "Something went wrong 😮‍💨, try again later"
+msgstr "Coś poszło nie tak 😮💨, spróbuj ponownie później"
+
+#: bot/keyboards/custom_keyboards.py:61 bot/keyboards/custom_keyboards.py:80
+msgid "Keep"
+msgstr "Zachowaj"
+
+#: bot/keyboards/custom_keyboards.py:62 bot/keyboards/custom_keyboards.py:81
+msgid "Delete🙇‍♂️"
+msgstr "Usuń🙇♂️"
+
+#: bot/keyboards/custom_keyboards.py:71
+msgid "Delete"
+msgstr "Usuń"
+
+#: bot/keyboards/custom_keyboards.py:72
+msgid "Buy"
+msgstr "Kup"
+
+#: bot/middlewares/user.py:36
+msgid "Unavailable command"
+msgstr "Niedostępne polecenie"
+
+#: bot/misc/functions.py:34
+msgid "Already following 😎"
+msgstr "Already following 😎"
+
+#: bot/misc/scheduler.py:41
+msgid "The price of selected products has changed"
+msgstr "Cena wybranych produktów uległa zmianie"
+
+#: bot/misc/scheduler.py:78
+msgid "Hello, select the products you are still following, Or leave it as it is"
+msgstr ""
+"Witaj, wybierz produkty, które nadal śledzisz, lub pozostaw je tak jak "
+"jest"
+
+#: bot/utils/set_commands.py:8
+msgid "Список товарів"
+msgstr ""
+
+#: bot/utils/set_commands.py:9
+msgid "Підказки"
+msgstr ""
+
+#: bot/utils/set_commands.py:10
+msgid "Мова"
+msgstr ""
+
+#: bot/utils/set_commands.py:11
+msgid "Список доступних крамниць"
+msgstr ""
+
+#~ msgid "order-name"
+#~ msgstr "order-name"
+
+#~ msgid "New prices"
+#~ msgstr "Nowe ceny"
+
+#~ msgid "Hello"
+#~ msgstr "Witam"
+
