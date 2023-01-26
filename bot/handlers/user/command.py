@@ -4,7 +4,7 @@ from bot.database.models.goods import Order
 from bot.misc.functions import save_to_db
 from bot.keyboards.custom_keyboards import show_shopping_cart, list_of_shops, language_keyboard
 from bot.middlewares.throttling import rate_limit
-from bot.misc.pars import big_parser, validate_shop
+from bot.misc.pars import big_parser, validate_shop, find_product_in_another_store
 from bot.middlewares.locale_middleware import get_text as _
 from bot.data.texts import HELP_COMMAND
 
@@ -54,13 +54,16 @@ async def main_handler(message: types.Message):
     url = message.text
     user_id = message.from_user.id
 
-    store = validate_shop(url)
+    store_name, store = validate_shop(url)
     price, title = big_parser(url, store)
 
     if not (isinstance(price, int) and title):
         await message.answer(_('Something went wrong 😮‍💨, try again later'))
 
     await message.answer(text=save_to_db(user_id, title, url, price))
+
+    urls = find_product_in_another_store(title, store_name)
+    print(urls)
 
 
 def register_user_handlers(dp: Dispatcher):

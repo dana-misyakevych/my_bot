@@ -3,7 +3,7 @@ from peewee import CharField, DateTimeField, ForeignKeyField, IntegerField
 from peewee import Model, SqliteDatabase
 from bot.utils.date_func import last_month, get_yesterday_today_date
 
-database = SqliteDatabase('/home/oleh/PycharmProjects/Tsinovyk/bot/database/all_data.db')
+database = SqliteDatabase('/home/oleh/PycharmProjects/tsinovyk/bot/database/all_data.db')
 
 
 class BaseModel(Model):
@@ -24,6 +24,9 @@ class User(BaseModel):
     def get_user_locale(cls, user_id):
         try:
             language_code = cls.get_or_none(cls.user_id == user_id).language
+
+            if language_code is None:
+                language_code = 'uk'
         except AttributeError:
             language_code = 'uk'
 

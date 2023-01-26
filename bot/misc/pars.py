@@ -5,6 +5,8 @@ import requests
 import tldextract as tldextract
 from bs4 import BeautifulSoup
 from fake_headers import Headers
+from googlesearch import search as g_search
+
 
 from bot.database.models.goods import OrdersPrices
 
@@ -68,7 +70,7 @@ def validate_shop(url):
     }
 
     ext = tldextract.extract(url)
-    return params.get(ext.domain)
+    return ext.domain, params.get(ext.domain)
 
 
 def clear_price(price: str) -> int:
@@ -108,3 +110,17 @@ def log():
 
 
 logg = log()
+
+
+def find_product_in_another_store(product_name, store):
+    domains = []
+    result = []
+    for url in g_search(product_name, pause=5, stop=100):
+        ext = tldextract.extract(url)
+        domain, param = validate_shop(url)
+        if param and domain not in domains and domain != store:
+            domains.append(ext.domain)
+            result.append(url)
+
+    return result
+
