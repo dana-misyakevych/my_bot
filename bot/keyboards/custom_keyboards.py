@@ -1,6 +1,6 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from peewee import ModelSelect
-from bot.database.models.goods import Order
+from bot.database.models.goods import Order, Url, OrdersPrices
 from bot.misc.functions import add_price_status
 from bot.middlewares.locale_middleware import get_text as _
 
@@ -65,11 +65,10 @@ def custom_buttons(keyboard: InlineKeyboardMarkup, params: str, order) -> Inline
 
 
 def url_kb(ware_id: int, param: str) -> InlineKeyboardMarkup:
-    url = Order.get_url(ware_id)
 
     url_keyboard = InlineKeyboardMarkup(row_width=2)
-    url_keyboard.add(InlineKeyboardButton(text=_('Delete'), callback_data=f'may-i-delete-order_wr-{ware_id}_{param}')) \
-        .insert(InlineKeyboardButton(text=_('Buy'), url=url))
+    url_keyboard.add(InlineKeyboardButton(text=_('Delete'), callback_data=f'may-i-delete-order_wr-{ware_id}_pr-{param}')) \
+        .insert(InlineKeyboardButton(text=_('Buy'), callback_data=f'buy-it_wr-{ware_id}_pr-{param}'))
 
     return url_keyboard
 
@@ -107,3 +106,22 @@ def language_keyboard():
     button_pl = InlineKeyboardButton('🇵🇱', callback_data='locale_pl')
 
     return InlineKeyboardMarkup().add(button_uk).insert(button_en).insert(button_pl)
+
+
+def order_from_diff_stores(ware_id, param):
+
+    keyboard = InlineKeyboardMarkup(row_width=2)
+    urls = Url.select(Url.url, OrdersPrices.store)\
+        .join(OrdersPrices, on=(OrdersPrices.ware_id == Url.ware_id))\
+        .where(Url.ware_id == ware_id)\
+        .group_by(OrdersPrices.store)
+
+    keyboard.add(InlineKeyboardButton(text='🔙', callback_data=f'back_pr-buying_wr-{ware_id}'))
+    for idx, url in enumerate(urls):
+        if idx % 2 == 0:
+            keyboard.add(InlineKeyboardButton(url.ordersprices.store, url=url.url))
+        else:
+            keyboard.insert(InlineKeyboardButton(url.ordersprices.store, url=url.url))
+
+    return keyboard
+

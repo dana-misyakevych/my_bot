@@ -4,13 +4,12 @@ import datetime
 import aiohttp
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.schedulers.background import BackgroundScheduler
-from bs4 import BeautifulSoup
 
 from bot.config import bot
 from bot.database.models.goods import UsersOrders, OrdersPrices, Order
 from bot.keyboards.custom_keyboards import show_shopping_cart
 from bot.middlewares.locale_middleware import get_text as _
-from bot.misc.pars import small_parser, validate_shop, clear_price
+from bot.misc.pars import small_parser
 
 
 def scheduler():

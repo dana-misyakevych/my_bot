@@ -59,7 +59,9 @@ class Order(BaseModel):
 
     @classmethod
     def get_following_orders(cls):
-        return cls.select(cls.ware_id.distinct(), cls.url).join(UsersOrders, on=(UsersOrders.ware_id == cls.ware_id))
+        return cls.select(cls.ware_id.distinct(), Url.url).join(UsersOrders, on=(UsersOrders.ware_id == cls.ware_id))\
+                .switch(cls)\
+                .join(Url, on=(Url.ware_id == cls.ware_id))
 
     @classmethod
     def get_second_last_month_orders(cls, user_id):
@@ -131,6 +133,7 @@ class OrdersPrices(BaseModel):
         table_name = 'orders_prices'
 
     ware_id = ForeignKeyField(Order, field='ware_id')
+    store = CharField()
     date = DateTimeField()
     price = IntegerField(default=None)
     status = IntegerField(unique=False, null=True)
@@ -145,7 +148,7 @@ class OrdersPrices(BaseModel):
 
     @classmethod
     def get_last_moth_prices(cls, ware_id):
-        return cls.select(cls.price.distinct(), cls.date) \
+        return cls.select(cls.price.distinct(), cls.date, cls.store) \
             .where((cls.ware_id == ware_id) & (cls.date > last_month()))
 
     @classmethod
@@ -153,5 +156,13 @@ class OrdersPrices(BaseModel):
         cls.update(status=price_status).where(cls.ware_id == ware_id).execute()
 
 
+class Url(BaseModel):
+    class Meta:
+        table_name = 'urls'
+
+    ware_id = ForeignKeyField(Order, field='ware_id')
+    url = CharField()
+
+
 def init_db():
-    database.create_tables([User, Order, OrdersPrices, UsersOrders], safe=True)
+    database.create_tables([User, Order, OrdersPrices, UsersOrders, Url], safe=True)

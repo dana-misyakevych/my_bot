@@ -4,7 +4,7 @@ from aiogram.dispatcher.filters import Text
 from bot.config import bot
 from bot.database.models.goods import UsersOrders, Order, User
 from bot.keyboards.custom_keyboards import url_kb, show_shopping_cart, \
-    choice_kb, edited_shopping_cart, language_keyboard
+    choice_kb, edited_shopping_cart, language_keyboard, order_from_diff_stores
 from bot.middlewares.throttling import rate_limit
 from bot.misc.functions import get_callback_data, query_to_db, plot_graph
 from bot.middlewares.locale_middleware import get_text as _
@@ -93,6 +93,10 @@ async def back_to_original_orders_cart(callback: types.CallbackQuery):
         orders = Order.get_second_last_month_orders(user_id)
         keyboard = show_shopping_cart(orders, param, price_status=False)
 
+    elif param == 'buying':
+
+        keyboard = url_kb(ware_id, param)
+
     else:
         keyboard = show_shopping_cart(Order.get_user_orders(user_id), callback_data=param)
 
@@ -109,6 +113,15 @@ async def save_locale(callback: types.CallbackQuery):
         await callback.message.edit_text(text=_(HELP_COMMAND, locale=loc), reply_markup=language_keyboard())
 
 
+async def buy_it_now(callback: types.CallbackQuery):
+
+    _, ware_id, param = get_callback_data(callback)
+
+    keyboard = order_from_diff_stores(ware_id, param)
+
+    await callback.message.edit_reply_markup(reply_markup=keyboard)
+
+
 def register_callback_handlers(dp: Dispatcher):
     dp.register_callback_query_handler(change_buttons_on_orders_cart, Text(startswith='order-name'))
     dp.register_callback_query_handler(may_i_delete_order, Text(startswith='may-i-delete-order'))
@@ -116,3 +129,4 @@ def register_callback_handlers(dp: Dispatcher):
     dp.register_callback_query_handler(back_to_original_orders_cart, Text(startswith='back'))
     dp.register_callback_query_handler(delete_or_safe, Text(startswith='delete'))
     dp.register_callback_query_handler(save_locale, Text(startswith='locale'))
+    dp.register_callback_query_handler(buy_it_now, Text(startswith='buy-it'))

@@ -1,3 +1,4 @@
+import asyncio
 import datetime
 import io
 import random
@@ -5,16 +6,23 @@ import re
 import aiogram.types
 
 from typing import Optional
+
+import aiohttp
 from matplotlib import pyplot as plt
 from peewee import ModelSelect
 from bot.middlewares.locale_middleware import get_text as _
-from bot.database.models.goods import Order, UsersOrders, OrdersPrices, User
+from bot.database.models.goods import Order, UsersOrders, OrdersPrices, User, Url
 from bot.data.texts import reply_to_start_tracking
+import tldextract as tldextract
+from googlesearch import search as g_search
+
+from bot.misc.pars import validate_shop, save_from_others_stores
 
 
 def save_to_db(user_id: int, name: str, url: str, price: int) -> str:
     ware_id = my_hash(name)
     today = datetime.date.today()
+    store_name = tldextract.extract(url).domain
 
     if not User.get_or_none(User.user_id == user_id):
         User.create(user_id=user_id).save()
@@ -23,8 +31,8 @@ def save_to_db(user_id: int, name: str, url: str, price: int) -> str:
 
         Order.create(ware_id=ware_id, name=name, date=today, url=url).save()
         UsersOrders.create(user_id=user_id, ware_id=ware_id, date=today).save()
-        OrdersPrices.create(ware_id=ware_id, date=today, price=price).save()
-
+        OrdersPrices.create(ware_id=ware_id, date=today, price=price, store=store_name).save()
+        Url.create(ware_id=ware_id, url=url)
         message = _(random.choice(reply_to_start_tracking))
 
     else:
@@ -38,6 +46,17 @@ def save_to_db(user_id: int, name: str, url: str, price: int) -> str:
             message = _('Started following 🫡')
 
     return message
+
+
+async def save_urls_and_prices_to_db(urls, prices, name):
+    today = datetime.date.today()
+    ware_id = my_hash(name)
+    for url, price in zip(urls, prices):
+
+        store_name = tldextract.extract(url).domain
+
+        Url.create(ware_id=ware_id, url=url).save()
+        OrdersPrices.create(ware_id=ware_id, date=today, price=price, store=store_name).save()
 
 
 def query_to_db(action: str, user_id=None) -> ModelSelect:
@@ -56,9 +75,9 @@ def get_callback_data(callback: aiogram.types.CallbackQuery) -> list[int, Option
 
     callback_data = [callback.from_user.id]
     callback = callback.data.split('_')
-    for data in callback:
 
-        if data in ('order-name', 'order-name-new-price', 'order-name-old-order'):
+    for data in callback:
+        if data in ('order-name', 'order-name-new-price', 'order-name-old-order', 'buying'):
             callback_data.insert(6, data)
 
         prefix = data[:2]
@@ -107,13 +126,30 @@ def plot_graph(ware_id: int):
     if len(ware_name) > 90:
         ware_name = ware_name[:90] + '...'
 
-    date = [data.date.strftime('%d-%m-%y') for data in ware_info]
-    price = [data.price for data in ware_info]
+    date = []
+    for day in ware_info:
+
+        if day.date.strftime('%d-%m-%y') not in date:
+            date.append(day.date.strftime('%d-%m-%y'))
+
+    prices = [[data.price, data.store]for data in ware_info]
+    stores = {}
+    for price in prices:
+        if not stores.get(price[1]):
+            stores[price[1]] = [price[0]]
+
+        elif stores.get(price[1]):
+
+            stores.get(price[1]).append(price[0])
 
     plt.style.use('seaborn')
-    plt.plot(date, price, 'o', linestyle='solid')
     plt.title(ware_name)
 
+    print(stores)
+    for key, value in stores.items():
+        plt.plot(date, value, 'o', linestyle='solid', label=key)
+
+    plt.legend(loc="upper left")
     with io.BytesIO() as file_object:
         plt.savefig(file_object, format='png')
         file_object.seek(0)
@@ -138,3 +174,20 @@ def add_price_status(name: str, status: int) -> str:
         name = f'{status}🏷️ ' + name
 
     return name
+
+
+async def find_product_in_another_store(product_name, store):
+
+    ware_id = my_hash(product_name)
+    domains = []
+    tasks = []
+    async with aiohttp.ClientSession() as session:
+
+        for url in g_search(product_name, pause=5, stop=100):
+            await asyncio.sleep(0.01)
+            domain, param = validate_shop(url)
+            if param and domain not in domains and domain != store:
+                task = asyncio.create_task(save_from_others_stores(session, url, ware_id))
+                tasks.append(task)
+
+        await asyncio.gather(*tasks)
