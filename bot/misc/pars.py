@@ -1,3 +1,4 @@
+import asyncio
 import datetime
 import re
 import logging
@@ -30,6 +31,7 @@ def big_parser(url: str, params: list):
 
 
 async def small_parser(session, order):
+    # await asyncio.sleep(1)
     user_agent = Headers(headers=True).generate()
     url = order.url.url
     params = validate_shop(url)

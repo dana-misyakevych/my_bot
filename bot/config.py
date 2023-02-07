@@ -4,7 +4,9 @@ from aiogram import Bot, Dispatcher
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from dotenv import load_dotenv
 
-load_dotenv(dotenv_path='/home/oleh/PycharmProjects/tsinovyk/bot/data/.env')
+from bot.data import data_path
+
+load_dotenv(dotenv_path=f'{data_path}/.env')
 
 DEPLOY = False
 

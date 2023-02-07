@@ -74,11 +74,15 @@ def query_to_db(action: str, user_id=None) -> ModelSelect:
 def get_callback_data(callback: aiogram.types.CallbackQuery) -> list[int, Optional[str]]:
 
     callback_data = [callback.from_user.id]
-    callback = callback.data.split('_')
+    callback_d = callback.data.split('_')
 
-    for data in callback:
+    for data in callback_d:
         if data in ('order-name', 'order-name-new-price', 'order-name-old-order', 'buying'):
             callback_data.insert(6, data)
+
+        if 'of' in data:
+            start, end = data[3:].split('-')
+            callback_data.insert(10, [int(start), int(end)])
 
         prefix = data[:2]
         data = data[3:]
@@ -87,11 +91,21 @@ def get_callback_data(callback: aiogram.types.CallbackQuery) -> list[int, Option
             callback_data.insert(1, int(data))
 
         elif prefix == 'bt':
-            callback_data.insert(2, int(data))
+            callback_data.insert(2, int(data.strip('=')))
 
         elif prefix == 'pr':
             callback_data.insert(5, data)
 
+    if 'of' not in callback.data:
+        callback_data.insert(10, None)
+
+    if 'wr' not in callback.data:
+        callback_data.insert(1, None)
+
+    if 'bt' not in callback.data:
+        callback_data.insert(2, None)
+
+    # print(callback_data)
     return callback_data
 
 
