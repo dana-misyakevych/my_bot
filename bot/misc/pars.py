@@ -1,12 +1,14 @@
 import asyncio
 import datetime
-import re
 import logging
+
+import aiohttp
 import requests
-import tldextract as tldextract
 from bs4 import BeautifulSoup
 from fake_headers import Headers
 from bot.database.models.goods import OrdersPrices, Url
+from bot.misc.functions import validate_shop, my_hash, clear_price
+from googlesearch import search as g_search
 
 
 def big_parser(url: str, params: list):
@@ -30,15 +32,53 @@ def big_parser(url: str, params: list):
         return False, False
 
 
-async def small_parser(session, order):
-    # await asyncio.sleep(1)
+async def small_parser(order):
+
     user_agent = Headers(headers=True).generate()
+    user_agent['Accept-Encoding'] = 'identity'
     url = order.url.url
+
     params = validate_shop(url)
+
     if params[1]:
-        user_agent['Accept-Encoding'] = 'identity'
+
         price = None
+        connector = aiohttp.TCPConnector(force_close=True)
+
+        async with aiohttp.ClientSession(connector=connector) as session:
+            async with session.get(url, headers=user_agent) as response:
+
+                # if not response.ok:
+                #     logg.warning(url, params, response.status_code)
+
+                try:
+                    f = BeautifulSoup(await response.text(), "lxml")
+
+                    product_price = f.find(class_=params[1][0])
+                    if product_price and product_price != 0:
+                        product_price = product_price.text
+
+                        price = clear_price(product_price.strip())
+
+                except AttributeError as e:
+                    logg.exception(f'{e}, {url}, {params}')
+
+                if not isinstance(price, int):
+                    price = None
+
+                OrdersPrices.create(ware_id=order.ware_id, date=datetime.date.today(), price=price, store=params[1][2]).save()
+
+
+async def save_from_others_stores(url, ware_id):
+    user_agent = Headers(headers=True).generate()
+    user_agent['Accept-Encoding'] = 'identity'
+    params = validate_shop(url)
+    price = None
+    connector = aiohttp.TCPConnector(force_close=True)
+
+    async with aiohttp.ClientSession(connector=connector) as session:
         async with session.get(url, headers=user_agent) as response:
+
 
             # if not response.ok:
             #     logg.warning(url, params, response.status_code)
@@ -56,73 +96,24 @@ async def small_parser(session, order):
                 logg.exception(f'{e}, {url}, {params}')
 
             if isinstance(price, int):
-                OrdersPrices.create(ware_id=order.ware_id, date=datetime.date.today(), price=price, store=params[0]).save()
+                Url.create(ware_id=ware_id, url=url).save()
+                OrdersPrices.create(ware_id=ware_id, date=datetime.date.today(), price=price, store=params[0]).save()
 
 
-async def save_from_others_stores(session, url, ware_id):
-    user_agent = Headers(headers=True).generate()
-    params = validate_shop(url)
-    price = None
-    async with session.get(url, headers=user_agent) as response:
+async def find_product_in_another_store(product_name, first_domain):
 
-        user_agent['Accept-Encoding'] = 'identity'
-        # if not response.ok:
-        #     logg.warning(url, params, response.status_code)
+    ware_id = my_hash(product_name)
+    domains = [first_domain]
+    tasks = []
 
-        try:
-            f = BeautifulSoup(await response.text(), "lxml")
+    for url in g_search(product_name, pause=5, stop=100, lang='uk'):
+        await asyncio.sleep(0.01)
+        domain, param = validate_shop(url)
+        if param and domain not in domains:
+            task = asyncio.create_task(save_from_others_stores(url, ware_id))
+            tasks.append(task)
 
-            product_price = f.find(class_=params[1][0])
-            if product_price and product_price != 0:
-                product_price = product_price.text
-
-                price = clear_price(product_price.strip())
-
-        except AttributeError as e:
-            logg.exception(f'{e}, {url}, {params}')
-
-        if isinstance(price, int):
-            Url.create(ware_id=ware_id, url=url).save()
-            OrdersPrices.create(ware_id=ware_id, date=datetime.date.today(), price=price, store=params[1][2]).save()
-
-
-def validate_shop(url):
-    params = {
-        'rozetka': ['product-prices__big', 'product__title', 'ROZETKA'],
-        'ctrs': ['price', re.compile("^title-0-2"), 'Цитрус'],
-        'telemart': ['b-i-product-topshort-buy-card-inner', 'b-page-title', 'Telemart'],
-        'aliexpress': ['uniform-banner-box-price', 'product-title', 'Aliexpress'],
-        'allo': ['sum', 'p-view__header-title', 'Алло'],
-        'moyo': ['product_price_current', 'product_name', 'MOYO'],
-        'nashformat': ['product-price', 'col-lg-8', 'Наш Формат'],
-        'comfy': ['price__current', 'gen-tab__name', 'Comfy'],
-        'foxtrot': ['product-box__main_price', 'page__title overflow', 'Foxtrot'],
-        'epicentrk': ['p-price__main', 'p-header__title nc', 'Епіцентр'],
-        'zhuk': ['product-price__item product-price__item--new', 'product-title', 'ЖЖУК'],
-        'kvshop': ['ProductPrice ProductPrice_lg', 'h3', 'Комп\'ютерний Всесвіт'],
-        'makeup': ['price_item', 'product-item__name', 'MAKEUP'],
-        'apteka911': ['price-new', 'product-head-instr tl', 'Apteka911'],
-        'add': ['price', 'base', 'ADD'],
-        'kasta': ['p__price', 'p__pads', 'Kasta'],
-        'yakaboo': ['ui-price-display__main', 'base-product__title', 'Yakaboo']
-
-    }
-
-    ext = tldextract.extract(url)
-    return ext.domain, params.get(ext.domain)
-
-
-def clear_price(price: str) -> int:
-    result = ''
-    for char in price:
-        try:
-            int(char)
-            result += char
-
-        except ValueError:
-            continue
-    if result:
-        return int(result)
+    await asyncio.gather(*tasks)
 
 
 def log():

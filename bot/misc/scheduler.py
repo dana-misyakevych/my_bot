@@ -65,13 +65,13 @@ def schedule_price_check():
 async def schedule_pars():
     orders = Order.get_following_orders()
     tasks = []
-    async with aiohttp.ClientSession() as session:
 
-        for order in orders:
-            task = asyncio.create_task(small_parser(session, order))
-            tasks.append(task)
+    for order in orders:
+        await asyncio.sleep(0.001)
+        task = asyncio.create_task(small_parser(order))
+        tasks.append(task)
 
-        await asyncio.gather(*tasks)
+    await asyncio.gather(*tasks)
 
 
 async def ask_good_status():

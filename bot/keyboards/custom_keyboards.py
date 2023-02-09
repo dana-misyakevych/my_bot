@@ -1,11 +1,13 @@
 import json
 
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from peewee import JOIN, fn
 
 from bot.data import data_path
 from bot.database.models.goods import Url, OrdersPrices
 from bot.middlewares.locale_middleware import get_text as _
 from bot.misc.functions import add_price_status
+from bot.misc.pars import validate_shop
 
 
 def show_shopping_cart(orders, callback_data: str, startend=None, edit=None, price_status: bool = True) -> InlineKeyboardMarkup:
@@ -37,18 +39,53 @@ def show_shopping_cart(orders, callback_data: str, startend=None, edit=None, pri
             cart_buttons.add(InlineKeyboardButton(text=name, callback_data=callback_data_))
             button_id += 1
             offset = ((button_id - 1) // 10) + 1
-
             continue
 
         button_id += 1
 
     pages = (len(orders) // 10) + 1
-    if pages > 2:
+    if pages > 1:
         set_pages(cart_buttons, pages, offset, callback_data, start_end)
-    if pages == 2:
-        set_prev_next_pages(cart_buttons, pages, offset, callback_data, start_end)
+    # if pages == 2:
+    #     set_prev_next_pages(cart_buttons, pages, offset, callback_data, start_end)
 
     return cart_buttons
+
+
+def set_pages(keyboard, pages: int, page, param, current_page):
+    buttons = {
+        1: '1️⃣', 2: '2️⃣', 3: '3️⃣', 4: '4️⃣', 5: '5️⃣', 6: '6️⃣', 7: '7️⃣', 8: '8️⃣', 9: '9️⃣', 0: '0️⃣', 10: '🔟'
+    }
+
+    btn = InlineKeyboardButton
+    prev_offset = [(x - 10)for x in current_page]
+    next_offset = [(x + 10)for x in current_page]
+    next_next_offset = [(x + 20)for x in current_page]
+    left_to_end = buttons.get(page + 1)
+    end = buttons.get(page + 2)
+
+    if page != pages:
+        first_button = btn('◀️', callback_data=f'{param}_of-{prev_offset[0]}-{prev_offset[1]}')
+
+        if page == 1:
+            first_button = btn('⏺', callback_data='0')
+
+        left_to_end_button = btn(left_to_end, callback_data=f'{param}_of-{next_offset[0]}-{next_offset[1]}')
+        end_button = btn(end, callback_data=f'{param}_of-{next_next_offset[0]}-{next_next_offset[1]}')
+
+        if pages - page == 1:
+            left_to_end_button = btn('⏮', callback_data=f'{param}_of-0-10')
+            end_button = btn(left_to_end, callback_data=f'{param}_of-{next_offset[0]}-{next_offset[1]}')
+
+        keyboard.add(first_button).insert(left_to_end_button).insert(end_button) \
+            .insert(btn('▶️', callback_data=f'{param}_of-{next_offset[0]}-{next_offset[1]}'))
+
+    if page == pages:
+        keyboard.add(btn('◀️', callback_data=f'{param}_of-{prev_offset[0]}-{prev_offset[1]}')) \
+            .insert(btn('⏮', callback_data=f'{param}_of-0-10')) \
+            .insert(btn('⏺', callback_data='0'))
+
+    return keyboard
 
 
 def custom_buttons(keyboard: InlineKeyboardMarkup, params: str, order, offset) -> InlineKeyboardMarkup:
@@ -99,7 +136,7 @@ def list_of_shops(startend=None) -> InlineKeyboardMarkup:
     range_of_buttons = [x for x in range(start_end[0], start_end[1])]
     for idx, values in enumerate(stores.items()):
         if idx in range_of_buttons:
-            stores_kb.add(InlineKeyboardButton(text=values[0], url=values[1]))
+            stores_kb.add(InlineKeyboardButton(text=values[0], url=values[1][0]))
             offset = ((idx - 1) // 10) + 1
 
     pages = (len(stores) // 10) + 1
@@ -120,58 +157,20 @@ def language_keyboard():
 def order_from_diff_stores(ware_id, param):
 
     keyboard = InlineKeyboardMarkup(row_width=2)
-    urls = Url.select(Url.url, OrdersPrices.store)\
-        .join(OrdersPrices, on=(OrdersPrices.ware_id == Url.ware_id))\
-        .where(Url.ware_id == ware_id)\
-        .group_by(OrdersPrices.store)
+    urls = Url.select(Url.url).where((Url.ware_id == ware_id))
 
     keyboard.add(InlineKeyboardButton(text='🔙', callback_data=f'back_pr-buying_wr-{ware_id}'))
+
     for idx, url in enumerate(urls):
-        if idx % 2 == 0:
-            keyboard.add(InlineKeyboardButton(url.ordersprices.store, url=url.url))
+        if idx % 2 == 0 and len(urls) % 2 == 0:
+            keyboard.add(InlineKeyboardButton(validate_shop(url.url)[1][2], url=url.url))
         else:
-            keyboard.insert(InlineKeyboardButton(url.ordersprices.store, url=url.url))
+            keyboard.insert(InlineKeyboardButton(validate_shop(url.url)[1][2], url=url.url))
 
     return keyboard
 
 
-def set_pages(keyboard, pages: int, page, param, current_page):
-    buttons = {
-        1: '1️⃣', 2: '2️⃣', 3: '3️⃣', 4: '4️⃣', 5: '5️⃣', 6: '6️⃣', 7: '7️⃣', 8: '8️⃣', 9: '9️⃣', 0: '0️⃣', 10: '🔟'
-    }
-
-    btn = InlineKeyboardButton
-    prev_offset = [(x - 10)for x in current_page]
-    next_offset = [(x + 10)for x in current_page]
-    next_next_offset = [(x + 20)for x in current_page]
-    left_to_end = buttons.get(page + 1)
-    end = buttons.get(page + 2)
-
-    if page != pages:
-        first_button = btn('◀️', callback_data=f'{param}_of-{prev_offset[0]}-{prev_offset[1]}')
-
-        if page == 1:
-            first_button = btn('⏺', callback_data='0')
-
-        left_to_end_button = btn(left_to_end, callback_data=f'{param}_of-{next_offset[0]}-{next_offset[1]}')
-        end_button = btn(end, callback_data=f'{param}_of-{next_next_offset[0]}-{next_next_offset[1]}')
-
-        if pages - page == 1:
-            left_to_end_button = btn('⏮', callback_data=f'{param}_of-0-10')
-            end_button = btn(left_to_end, callback_data=f'{param}_of-{next_offset[0]}-{next_offset[1]}')
-
-        keyboard.add(first_button).insert(left_to_end_button).insert(end_button) \
-            .insert(btn('▶️', callback_data=f'{param}_of-{next_offset[0]}-{next_offset[1]}'))
-
-    if page == pages:
-        keyboard.add(btn('◀️', callback_data=f'{param}_of-{prev_offset[0]}-{prev_offset[1]}')) \
-            .insert(btn('⏮', callback_data=f'{param}_of-0-10')) \
-            .insert(btn('⏺', callback_data='0'))
-
-    return keyboard
-
-
-def set_prev_next_pages(keyboard, pages: int, page, param, current_page):
+def set_prev_next_pages(keyboard, pages: int, page: int, param, current_page):
 
     btn = InlineKeyboardButton
     prev_offset = [(x - 10) for x in current_page]

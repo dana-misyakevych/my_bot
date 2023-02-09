@@ -135,7 +135,7 @@ class OrdersPrices(BaseModel):
     ware_id = ForeignKeyField(Order, field='ware_id')
     store = CharField()
     date = DateTimeField()
-    price = IntegerField(default=None)
+    price = IntegerField(default=None, null=True)
     status = IntegerField(unique=False, null=True)
 
     @classmethod

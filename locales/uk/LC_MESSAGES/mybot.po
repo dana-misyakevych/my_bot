@@ -7,21 +7,30 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-01-19 00:59+0200\n"
-"PO-Revision-Date: 2023-01-19 01:03+0200\n"
+"POT-Creation-Date: 2023-02-08 14:22+0200\n"
+"PO-Revision-Date: 2023-02-08 14:24+0200\n"
 "Last-Translator: \n"
-"Language: uk\n"
 "Language-Team: uk <LL@li.org>\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "Generated-By: Babel 2.11.0\n"
+"X-Generator: Poedit 3.2.2\n"
 
-#: bot/data/texts.py:3
+#: bot/data/texts.py:4
+#, fuzzy
+msgid "\"Just a link enough 😤\""
+msgstr "Достатньо тільки посилання"
+
+#: bot/data/texts.py:12 bot/misc/functions.py:45
+msgid "Started following 🫡"
+msgstr "Почав слідкувати"
+
+#: bot/data/texts.py:16
 msgid ""
-"\n"
 "Greetings! To work with the bot, just drop the link\n"
 "for the product you are interested in\n"
 "\n"
@@ -31,7 +40,6 @@ msgid ""
 "<b>/language</b> - <em>Language</em>\n"
 "<b>/stores</b> - <em>List of available stores</em>"
 msgstr ""
-"\n"
 "Вітання! для роботи з ботом достатньо просто скинути посилання \n"
 "на товар що вас зацікавив\n"
 "\n"
@@ -41,55 +49,15 @@ msgstr ""
 "<b>/language</b> - <em>Нлаштування мови</em>\n"
 "<b>/stores</b> - <em>Список домтупних крамниць</em>"
 
-#: bot/data/texts.py:13
-msgid "Just a link enough 😤"
-msgstr "Достатньо тільки посилання"
-
-#: bot/data/texts.py:14
-msgid "Can I just get a link? 🥺"
-msgstr "Можу я отримати тільки посилання? "
-
-#: bot/data/texts.py:15
-msgid "Hmm, let's try to just throw a link? 🤔"
-msgstr "Гмм, давай спробуєм просто посилання скинути"
-
-#: bot/data/texts.py:16
-msgid "It seems enough just to drop the link🤓"
-msgstr "Здається, достатньо всього лиш посилання"
-
-#: bot/data/texts.py:21
-msgid "The product has been tracked"
-msgstr "Взяв на олівчик"
-
-#: bot/data/texts.py:22
-msgid "Started tracking the product"
-msgstr "Додав до корзини"
-
-#: bot/data/texts.py:23
-msgid "Tracked the product"
-msgstr "Почав слідкувати"
-
-#: bot/data/texts.py:24
-msgid "Added the product to tracking system"
-msgstr "Почав слідкувати"
-
-#: bot/data/texts.py:25
-msgid "Tracked the product's progress"
-msgstr "Почав слідкувати"
-
-#: bot/data/texts.py:26
-msgid "A product tracking system has been set up"
-msgstr "Взяв на олівчик"
-
-#: bot/data/texts.py:27 bot/misc/functions.py:39
-msgid "Started following 🫡"
-msgstr "Почав слідкувати"
-
-#: bot/handlers/user/callback.py:28 bot/handlers/user/callback.py:30
+#: bot/handlers/user/callback.py:25 bot/handlers/user/callback.py:34
 msgid "Done!"
 msgstr "Готово!"
 
-#: bot/handlers/user/callback.py:40
+#: bot/handlers/user/callback.py:30 bot/handlers/user/callback.py:85
+msgid "Your cart is empty"
+msgstr "Ваша корзина порожня"
+
+#: bot/handlers/user/callback.py:43
 msgid "You don't have this product🧐"
 msgstr "У вас не має цього товару"
 
@@ -109,19 +77,19 @@ msgstr "Ось ваша корзина:"
 msgid "Something went wrong 😮‍💨, try again later"
 msgstr "Щось пішло не так, спробуйте ще раз пізніше"
 
-#: bot/keyboards/custom_keyboards.py:61 bot/keyboards/custom_keyboards.py:80
+#: bot/keyboards/custom_keyboards.py:65 bot/keyboards/custom_keyboards.py:83
 msgid "Keep"
 msgstr "Залишити"
 
-#: bot/keyboards/custom_keyboards.py:62 bot/keyboards/custom_keyboards.py:81
+#: bot/keyboards/custom_keyboards.py:66 bot/keyboards/custom_keyboards.py:84
 msgid "Delete🙇‍♂️"
 msgstr "Видалити"
 
-#: bot/keyboards/custom_keyboards.py:71
+#: bot/keyboards/custom_keyboards.py:74
 msgid "Delete"
 msgstr "Видалити"
 
-#: bot/keyboards/custom_keyboards.py:72
+#: bot/keyboards/custom_keyboards.py:75
 msgid "Buy"
 msgstr "Придбати"
 
@@ -129,15 +97,15 @@ msgstr "Придбати"
 msgid "Unavailable command"
 msgstr "Команда недоступна"
 
-#: bot/misc/functions.py:34
+#: bot/misc/functions.py:40
 msgid "Already following 😎"
 msgstr "Вже слідкую"
 
-#: bot/misc/scheduler.py:41
+#: bot/misc/scheduler.py:42
 msgid "The price of selected products has changed"
 msgstr "Змінилася ціна на окремі продукти"
 
-#: bot/misc/scheduler.py:78
+#: bot/misc/scheduler.py:82
 msgid "Hello, select the products you are still following, Or leave it as it is"
 msgstr "Привіт, виберіть товари, за якими ви ще стежите, або залиште як є"
 
@@ -163,3 +131,29 @@ msgstr ""
 #~ msgid "Hello"
 #~ msgstr "Привіт"
 
+#~ msgid "Can I just get a link? 🥺"
+#~ msgstr "Можу я отримати тільки посилання? "
+
+#~ msgid "Hmm, let's try to just throw a link? 🤔"
+#~ msgstr "Гмм, давай спробуєм просто посилання скинути"
+
+#~ msgid "It seems enough just to drop the link🤓"
+#~ msgstr "Здається, достатньо всього лиш посилання"
+
+#~ msgid "The product has been tracked"
+#~ msgstr "Взяв на олівчик"
+
+#~ msgid "Started tracking the product"
+#~ msgstr "Додав до корзини"
+
+#~ msgid "Tracked the product"
+#~ msgstr "Почав слідкувати"
+
+#~ msgid "Added the product to tracking system"
+#~ msgstr "Почав слідкувати"
+
+#~ msgid "Tracked the product's progress"
+#~ msgstr "Почав слідкувати"
+
+#~ msgid "A product tracking system has been set up"
+#~ msgstr "Взяв на олівчик"

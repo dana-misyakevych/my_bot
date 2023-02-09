@@ -1,7 +1,9 @@
 from aiogram import Dispatcher, types
 
+from bot.config import bot
 from bot.database.models.goods import Order
-from bot.misc.functions import save_to_db, find_product_in_another_store
+from bot.misc.functions import find_and_save_good, \
+    find_and_save_good_from_other_stores
 from bot.keyboards.custom_keyboards import show_shopping_cart, list_of_shops, language_keyboard
 from bot.middlewares.throttling import rate_limit
 from bot.misc.pars import big_parser, validate_shop
@@ -51,18 +53,18 @@ async def set_language(message: types.Message):
 
 @rate_limit(limit=6)
 async def main_handler(message: types.Message):
-    url = message.text
+
     user_id = message.from_user.id
 
-    store_name, store = validate_shop(url)
-    price, title = big_parser(url, store)
+    url = message.text
+    domain, store_params = validate_shop(url)
+    price, title = big_parser(url, store_params)
 
     if not (isinstance(price, int) and title):
         return await message.answer(_('Something went wrong 😮‍💨, try again later'))
 
-    await message.answer(text=save_to_db(user_id, title, url, price))
-
-    await find_product_in_another_store(title, store_name)
+    await find_and_save_good(user_id, price, title, url, domain, message, bot)
+    await find_and_save_good_from_other_stores(title, domain, message, bot)
 
 
 def register_user_handlers(dp: Dispatcher):

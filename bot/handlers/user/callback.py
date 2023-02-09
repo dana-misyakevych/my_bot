@@ -51,7 +51,7 @@ async def show_plot_price(callback: types.CallbackQuery):
 @rate_limit(limit=3)
 async def may_i_delete_order(callback: types.CallbackQuery):
 
-    user_id, ware_id, param = get_callback_data(callback)
+    user_id, ware_id, param, _ , _= get_callback_data(callback)
     await callback.message.edit_reply_markup(reply_markup=choice_kb(ware_id, param))
 
 

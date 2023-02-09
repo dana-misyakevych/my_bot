@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-01-19 00:59+0200\n"
+"POT-Creation-Date: 2023-02-08 14:22+0200\n"
 "PO-Revision-Date: 2023-01-17 14:20+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -18,9 +18,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.11.0\n"
 
-#: bot/data/texts.py:3
+#: bot/data/texts.py:4
+msgid "\"Just a link enough 😤\""
+msgstr ""
+
+#: bot/data/texts.py:12 bot/misc/functions.py:45
+msgid "Started following 🫡"
+msgstr ""
+
+#: bot/data/texts.py:16
 msgid ""
-"\n"
 "Greetings! To work with the bot, just drop the link\n"
 "for the product you are interested in\n"
 "\n"
@@ -31,55 +38,15 @@ msgid ""
 "<b>/stores</b> - <em>List of available stores</em>"
 msgstr ""
 
-#: bot/data/texts.py:13
-msgid "Just a link enough 😤"
-msgstr ""
-
-#: bot/data/texts.py:14
-msgid "Can I just get a link? 🥺"
-msgstr ""
-
-#: bot/data/texts.py:15
-msgid "Hmm, let's try to just throw a link? 🤔"
-msgstr ""
-
-#: bot/data/texts.py:16
-msgid "It seems enough just to drop the link🤓"
-msgstr ""
-
-#: bot/data/texts.py:21
-msgid "The product has been tracked"
-msgstr ""
-
-#: bot/data/texts.py:22
-msgid "Started tracking the product"
-msgstr ""
-
-#: bot/data/texts.py:23
-msgid "Tracked the product"
-msgstr ""
-
-#: bot/data/texts.py:24
-msgid "Added the product to tracking system"
-msgstr ""
-
-#: bot/data/texts.py:25
-msgid "Tracked the product's progress"
-msgstr ""
-
-#: bot/data/texts.py:26
-msgid "A product tracking system has been set up"
-msgstr ""
-
-#: bot/data/texts.py:27 bot/misc/functions.py:39
-msgid "Started following 🫡"
-msgstr ""
-
-#: bot/handlers/user/callback.py:28 bot/handlers/user/callback.py:30
+#: bot/handlers/user/callback.py:25 bot/handlers/user/callback.py:34
 msgid "Done!"
 msgstr ""
 
-#: bot/handlers/user/callback.py:40
+#: bot/handlers/user/callback.py:30 bot/handlers/user/callback.py:85
+msgid "Your cart is empty"
+msgstr ""
+
+#: bot/handlers/user/callback.py:43
 msgid "You don't have this product🧐"
 msgstr ""
 
@@ -99,19 +66,19 @@ msgstr ""
 msgid "Something went wrong 😮‍💨, try again later"
 msgstr ""
 
-#: bot/keyboards/custom_keyboards.py:61 bot/keyboards/custom_keyboards.py:80
+#: bot/keyboards/custom_keyboards.py:65 bot/keyboards/custom_keyboards.py:83
 msgid "Keep"
 msgstr ""
 
-#: bot/keyboards/custom_keyboards.py:62 bot/keyboards/custom_keyboards.py:81
+#: bot/keyboards/custom_keyboards.py:66 bot/keyboards/custom_keyboards.py:84
 msgid "Delete🙇‍♂️"
 msgstr ""
 
-#: bot/keyboards/custom_keyboards.py:71
+#: bot/keyboards/custom_keyboards.py:74
 msgid "Delete"
 msgstr ""
 
-#: bot/keyboards/custom_keyboards.py:72
+#: bot/keyboards/custom_keyboards.py:75
 msgid "Buy"
 msgstr ""
 
@@ -119,15 +86,15 @@ msgstr ""
 msgid "Unavailable command"
 msgstr ""
 
-#: bot/misc/functions.py:34
+#: bot/misc/functions.py:40
 msgid "Already following 😎"
 msgstr ""
 
-#: bot/misc/scheduler.py:41
+#: bot/misc/scheduler.py:42
 msgid "The price of selected products has changed"
 msgstr ""
 
-#: bot/misc/scheduler.py:78
+#: bot/misc/scheduler.py:82
 msgid "Hello, select the products you are still following, Or leave it as it is"
 msgstr ""
 
@@ -157,5 +124,47 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Початок роботи"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "\n"
+#~ "Greetings! To work with the bot, just drop the link\n"
+#~ "for the product you are interested in\n"
+#~ "\n"
+#~ "The following commands are also available to you:\n"
+#~ "<b>/start</b> - <em>Getting started with the bot</em>\n"
+#~ "<b>/cart</b> - <em>List of products you are following</em>\n"
+#~ "<b>/language</b> - <em>Language</em>\n"
+#~ "<b>/stores</b> - <em>List of available stores</em>"
+#~ msgstr ""
+
+#~ msgid "Just a link enough 😤"
+#~ msgstr ""
+
+#~ msgid "Can I just get a link? 🥺"
+#~ msgstr ""
+
+#~ msgid "Hmm, let's try to just throw a link? 🤔"
+#~ msgstr ""
+
+#~ msgid "It seems enough just to drop the link🤓"
+#~ msgstr ""
+
+#~ msgid "The product has been tracked"
+#~ msgstr ""
+
+#~ msgid "Started tracking the product"
+#~ msgstr ""
+
+#~ msgid "Tracked the product"
+#~ msgstr ""
+
+#~ msgid "Added the product to tracking system"
+#~ msgstr ""
+
+#~ msgid "Tracked the product's progress"
+#~ msgstr ""
+
+#~ msgid "A product tracking system has been set up"
 #~ msgstr ""
 

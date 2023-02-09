@@ -27,7 +27,7 @@ class UsersMiddleware(BaseMiddleware):
     async def on_process_message(message: Message, data: dict[str]):
 
         lang = str(User.get_user_locale(message.from_user.id))
-        store = validate_shop(message.text)
+        domain, store = validate_shop(message.text)
 
         if message.text[0] == '/':
 
