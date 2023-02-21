@@ -7,7 +7,7 @@ import requests
 from bs4 import BeautifulSoup
 from fake_headers import Headers
 from bot.database.models.goods import OrdersPrices, Url
-from bot.misc.functions import validate_shop, my_hash, clear_price
+from bot.misc.functions import Shop, my_hash, clear_price
 from googlesearch import search as g_search
 
 
@@ -38,9 +38,9 @@ async def small_parser(order):
     user_agent['Accept-Encoding'] = 'identity'
     url = order.url.url
 
-    params = validate_shop(url)
+    shop = Shop(url)
 
-    if params[1]:
+    if shop:
 
         price = None
         connector = aiohttp.TCPConnector(force_close=True)
@@ -54,25 +54,25 @@ async def small_parser(order):
                 try:
                     f = BeautifulSoup(await response.text(), "lxml")
 
-                    product_price = f.find(class_=params[1][0])
+                    product_price = f.find(class_=shop.product_price_class)
                     if product_price and product_price != 0:
                         product_price = product_price.text
 
                         price = clear_price(product_price.strip())
 
                 except AttributeError as e:
-                    logg.exception(f'{e}, {url}, {params}')
+                    logg.exception(f'{e}, {url}, {shop.product_price_class, shop.product_title_class}')
 
                 if not isinstance(price, int):
                     price = None
 
-                OrdersPrices.create(ware_id=order.ware_id, date=datetime.date.today(), price=price, store=params[1][2]).save()
+                OrdersPrices.create(ware_id=order.ware_id, date=datetime.date.today(), price=price, store=shop.domain).save()
 
 
 async def save_from_others_stores(url, ware_id):
     user_agent = Headers(headers=True).generate()
     user_agent['Accept-Encoding'] = 'identity'
-    params = validate_shop(url)
+    shop = Shop(url)
     price = None
     connector = aiohttp.TCPConnector(force_close=True)
 
@@ -86,18 +86,18 @@ async def save_from_others_stores(url, ware_id):
             try:
                 f = BeautifulSoup(await response.text(), "lxml")
 
-                product_price = f.find(class_=params[1][0])
+                product_price = f.find(class_=shop.product_price_class)
                 if product_price and product_price != 0:
                     product_price = product_price.text
 
                     price = clear_price(product_price.strip())
 
             except AttributeError as e:
-                logg.exception(f'{e}, {url}, {params}')
+                logg.exception(f'{e}, {url}, {shop.product_price_class, shop.product_title_class}')
 
             if isinstance(price, int):
                 Url.create(ware_id=ware_id, url=url).save()
-                OrdersPrices.create(ware_id=ware_id, date=datetime.date.today(), price=price, store=params[0]).save()
+                OrdersPrices.create(ware_id=ware_id, date=datetime.date.today(), price=price, store=shop.domain).save()
 
 
 async def find_product_in_another_store(product_name, first_domain):
@@ -108,8 +108,8 @@ async def find_product_in_another_store(product_name, first_domain):
 
     for url in g_search(product_name, pause=5, stop=100, lang='uk'):
         await asyncio.sleep(0.01)
-        domain, param = validate_shop(url)
-        if param and domain not in domains:
+        shop = Shop(url)
+        if shop and shop.domain not in domains:
             task = asyncio.create_task(save_from_others_stores(url, ware_id))
             tasks.append(task)
 

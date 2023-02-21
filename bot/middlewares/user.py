@@ -9,7 +9,7 @@ from bot.config import dp
 from bot.database.models.goods import User
 from bot.data.texts import answers
 from bot.keyboards.reply_keyboards import help_kb
-from bot.misc.pars import validate_shop
+from bot.misc.pars import Shop
 from bot.middlewares.locale_middleware import get_text as _
 
 
@@ -27,7 +27,7 @@ class UsersMiddleware(BaseMiddleware):
     async def on_process_message(message: Message, data: dict[str]):
 
         lang = str(User.get_user_locale(message.from_user.id))
-        domain, store = validate_shop(message.text)
+        shop = Shop(message.text)
 
         if message.text[0] == '/':
 
@@ -42,6 +42,6 @@ class UsersMiddleware(BaseMiddleware):
             await message.answer(_(answer, locale=lang), reply_markup=help_kb)
             raise CancelHandler()
 
-        elif not store:
+        elif not shop:
             await message.answer(_("Something went wrong 😮‍💨, try again later", locale=lang), reply_markup=help_kb)
             raise CancelHandler()
