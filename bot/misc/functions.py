@@ -5,7 +5,7 @@ import re
 
 import aiogram.types
 
-from typing import Optional
+from typing import Optional, Union
 from matplotlib import pyplot as plt
 from peewee import ModelSelect
 from bot.middlewares.locale_middleware import get_text as _
@@ -14,46 +14,44 @@ from bot.data.texts import reply_to_start_tracking
 from bot.data import stores_info
 import tldextract as tldextract
 
-from bot.misc import pars
+
+# def save_to_db(user_id: int, name: str, url: str, price: int, domain: list) -> str:
+#     ware_id = my_hash(name)
+#     today = datetime.date.today()
+#
+#     if not User.get_or_none(User.user_id == user_id):
+#         User.create(user_id=user_id).save()
+#
+#     if not Order.get_or_none(Order.name == name):
+#
+#         Order.create(ware_id=ware_id, name=name, date=today, url=url).save()
+#         UsersOrders.create(user_id=user_id, ware_id=ware_id, date=today).save()
+#         OrdersPrices.create(ware_id=ware_id, date=today, price=price, store=domain).save()
+#         Url.create(ware_id=ware_id, url=url)
+#         message = _(random.choice(reply_to_start_tracking))
+#
+#     else:
+#
+#         if UsersOrders.check_availability_on_user(user_id, ware_id):
+#             message = _('Already following 😎')
+#
+#         else:
+#
+#             UsersOrders.create(user_id=user_id, ware_id=ware_id, date=today).save()
+#             message = _('Started following 🫡')
+#
+#     return message
 
 
-def save_to_db(user_id: int, name: str, url: str, price: int, domain: list) -> str:
-    ware_id = my_hash(name)
-    today = datetime.date.today()
-
-    if not User.get_or_none(User.user_id == user_id):
-        User.create(user_id=user_id).save()
-
-    if not Order.get_or_none(Order.name == name):
-
-        Order.create(ware_id=ware_id, name=name, date=today, url=url).save()
-        UsersOrders.create(user_id=user_id, ware_id=ware_id, date=today).save()
-        OrdersPrices.create(ware_id=ware_id, date=today, price=price, store=domain).save()
-        Url.create(ware_id=ware_id, url=url)
-        message = _(random.choice(reply_to_start_tracking))
-
-    else:
-
-        if UsersOrders.check_availability_on_user(user_id, ware_id):
-            message = _('Already following 😎')
-
-        else:
-
-            UsersOrders.create(user_id=user_id, ware_id=ware_id, date=today).save()
-            message = _('Started following 🫡')
-
-    return message
-
-
-async def save_urls_and_prices_to_db(urls, prices, name):
-    today = datetime.date.today()
-    ware_id = my_hash(name)
-    for url, price in zip(urls, prices):
-
-        store_name = tldextract.extract(url).domain
-
-        Url.create(ware_id=ware_id, url=url).save()
-        OrdersPrices.create(ware_id=ware_id, date=today, price=price, store=store_name).save()
+# async def save_urls_and_prices_to_db(urls, prices, name):
+#     today = datetime.date.today()
+#     ware_id = my_hash(name)
+#     for url, price in zip(urls, prices):
+#
+#         store_name = tldextract.extract(url).domain
+#
+#         Url.create(ware_id=ware_id, url=url).save()
+#         OrdersPrices.create(ware_id=ware_id, date=today, price=price, store=store_name).save()
 
 
 def query_to_db(action: str, user_id=None) -> ModelSelect:
@@ -73,17 +71,17 @@ class CallBackInfo:
     def __init__(self, callback: aiogram.types.CallbackQuery):
         params = self.get_callback_data(callback)
         self.user_id = params.get('user_id')
-        self.param = params.get('pr')
-        self.ware_id = params.get('wr')
-        self.answer = params.get('ans')
         self.button_id = params.get('bt')
+        self.ware_id = params.get('wr')
+        self.answer = params.get('an')
         self.offset = params.get('of')
+        self.param = params.get('pr')
 
     @staticmethod
-    def get_callback_data(callback: aiogram.types.CallbackQuery) -> dict[str, Optional[str]]:
+    def get_callback_data(callback: aiogram.types.CallbackQuery) -> dict[str, Union[str, list[int]]]:
 
-        callback_d = callback.data.split('_')
         callback_data = {'user_id': callback.from_user.id}
+        callback_d = callback.data.split('_')
 
         for data in callback_d:
 
@@ -95,7 +93,6 @@ class CallBackInfo:
 
             callback_data[prefix] = data
 
-        print(callback_data)
         return callback_data
 
 
@@ -109,7 +106,7 @@ def my_hash(text: str) -> int:
     return hash_
 
 
-def clear_price(price_str: str) -> int:
+def clear_price(price_str: str) -> Optional[int]:
     digits = ''
     for char in price_str:
         if char.isdigit():
@@ -141,79 +138,73 @@ def plot_graph(ware_id: int):
     return save_image_into_png(plot)
 
 
-async def find_and_save_good(user_id, price, title, url, domain, message, bot):
+async def work_with_product(product, price, message, bot, message_obj):
 
-    message_obj = await message.answer(_('Сheck the goods'))
+    user_id = message.from_user.id
 
-    answer_text = save_to_db(user_id, title, url, price, domain)
+    code = await find_and_save_good(product, user_id, price, message, bot, message_obj)
+
+    if code == 200:
+        await find_and_save_good_from_other_stores(message, bot, product)
+
+
+async def find_and_save_good(product, user_id, price, message, bot, message_obj):
+
+    code, answer_text = product.save_to_db(user_id, price)
     await bot.edit_message_text(text=answer_text, message_id=message_obj.message_id, chat_id=message.chat.id)
 
+    return code
 
-async def find_and_save_good_from_other_stores(title, domain, message, bot):
+
+async def find_and_save_good_from_other_stores(message, bot, product):
 
     message_obj = await message.answer(_('Looking for goods in other stores'))
     text = _('Here\'s what I found')
 
-    await pars.find_product_in_another_store(title, domain)
+    await product.find_in_another_store()
     await bot.edit_message_text(text=text, message_id=message_obj.message_id, chat_id=message.chat.id)
-
-
-def save_image_into_png(plot_obj):
-    with io.BytesIO() as file_object:
-        plot_obj.savefig(file_object, format='png')
-        file_object.seek(0)
-        plot_obj.close()
-        return file_object.read()
 
 
 class Shop:
 
-    def __init__(self, url):
-        domain, info = self.validate_shop(url)
-        product_price_class, product_title_class, name = None, None, None
+    def __init__(self, url=None, domain=None):
+        domain, info = self.validate_shop(url, domain)
+        product_price_class, product_title_class, name, main_page, color = None, None, None, None, None
 
         if domain:
-            product_price_class, product_title_class, name = info
+            product_price_class, product_title_class, name, main_page, color = info
 
-        self.domain = domain
         self.product_price_class = product_price_class
         self.product_title_class = product_title_class
+        self.main_page = main_page
+        self.domain = domain
+        self.color = color
         self.name = name
 
     @staticmethod
-    def validate_shop(url):
+    def validate_shop(url=None, domain=None):
 
-        domain = tldextract.extract(url).domain
+        if not domain:
+            domain = tldextract.extract(url).domain
+
         params = stores_info.get(domain)
 
         if not params:
             return None, None
 
         second_params = params[1]
-        if '0re' == second_params[:3]:
-            second_params = re.compile(f"^{params[1]}")
+        if '0re-' == second_params[:4]:
+            params = [params[0], re.compile(r"^{}".format(second_params[4:])), *params[2:]]
 
-        return domain, [params[0], second_params, params[2]]
+        print(params)
+
+        return domain, params
 
     def __bool__(self):
         return bool(self.name)
 
     def __repr__(self):
         return self.name
-
-# def validate_shop(url):
-#
-#     domain = tldextract.extract(url).domain
-#     params = stores_info.get(domain)
-#
-#     if not params:
-#         return None, None
-#
-#     second_params = params[1]
-#     if '0re' == second_params[:3]:
-#         second_params = re.compile(f"^{params[1]}")
-#
-#     return domain, [params[0], second_params, params[2]]
 
 
 def get_info_for_build_plot(ware_id):
@@ -250,20 +241,19 @@ def build_plot(ware_id):
 
     for key, value in stores.items():
         current_price = value[-1]
-        stores_data = stores_info.get(key)
+        shop = Shop(key)
 
         if current_price and len(date) == len(value):
-            product_info = stores_data[2] + f' • {current_price}'
+            product_info = shop.name + f' • {current_price}'
             alpha = 0.6
 
             if current_price == min_price:
                 min_prices.append(product_info)
                 alpha = 1
 
-            plt.plot(date, value, 'o', linestyle='solid', label=product_info, color=stores_data[4], alpha=alpha)
+            plt.plot(date, value, 'o', linestyle='solid', label=product_info, color=shop.color, alpha=alpha)
 
-    plot = customize_plot(plt, stores, min_prices)
-    return plot
+    return customize_plot(plt, stores, min_prices)
 
 
 def customize_plot(plt, stores, min_price):
@@ -287,3 +277,11 @@ def customize_plot(plt, stores, min_price):
             text.set_color("red")
 
     return plt
+
+
+def save_image_into_png(plot_obj):
+    with io.BytesIO() as file_object:
+        plot_obj.savefig(file_object, format='png')
+        file_object.seek(0)
+        plot_obj.close()
+        return file_object.read()

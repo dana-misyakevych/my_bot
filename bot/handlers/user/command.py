@@ -2,11 +2,10 @@ from aiogram import Dispatcher, types
 
 from bot.config import bot
 from bot.database.models.goods import Order
-from bot.misc.functions import find_and_save_good, \
-    find_and_save_good_from_other_stores
-from bot.keyboards.custom_keyboards import show_shopping_cart, list_of_shops, language_keyboard
+from bot.misc.functions import work_with_product
+from bot.keyboards.custom_keyboards import Keyboard
 from bot.middlewares.throttling import rate_limit
-from bot.misc.pars import big_parser, Shop
+from bot.misc.pars import Shop, Product
 from bot.middlewares.locale_middleware import get_text as _
 from bot.data.texts import HELP_COMMAND
 
@@ -14,20 +13,20 @@ from bot.data.texts import HELP_COMMAND
 @rate_limit(limit=3)
 async def start_command(message: types.Message):
 
-    await message.answer(text=_(HELP_COMMAND), reply_markup=language_keyboard())
+    await message.answer(text=_(HELP_COMMAND), reply_markup=Keyboard.language_keyboard())
 
 
 @rate_limit(limit=3)
 async def help_command(message: types.Message):
 
-    await message.answer(text=_(HELP_COMMAND), reply_markup=language_keyboard())
+    await message.answer(text=_(HELP_COMMAND), reply_markup=Keyboard.language_keyboard())
 
 
 @rate_limit(limit=3)
 async def list_of_stores(message: types.Message):
 
     text = _('Shops are available: ')
-    await message.answer(text=text, reply_markup=list_of_shops())
+    await message.answer(text=text, reply_markup=Keyboard.list_of_shops())
 
 
 @rate_limit(limit=3)
@@ -38,7 +37,7 @@ async def shopping_cart(message: types.Message):
     if not orders:
         return await message.answer(text=_('Your cart is empty 🧐'))
 
-    inline_keyboard = show_shopping_cart(orders, price_status=True, callback_data='order-name')
+    inline_keyboard = Keyboard.show_shopping_cart(orders, price_status=True, callback_data='order-name')
     await message.answer(text=_('Here\'s your shopping cart:'), reply_markup=inline_keyboard)
 
 
@@ -48,23 +47,21 @@ async def set_language(message: types.Message):
     await message.answer(text='🇺🇦 Оберіть мову спілкування\n'
                               '🇬🇧 Chose your language\n'
                               '🇵🇱 Wybierz swój język',
-                         reply_markup=language_keyboard())
+                         reply_markup=Keyboard.language_keyboard())
 
 
 @rate_limit(limit=6)
 async def main_handler(message: types.Message):
-
-    user_id = message.from_user.id
-
     url = message.text
-    shop = Shop(url)
-    price, title = big_parser(url, [shop.product_price_class, shop.product_title_class])
 
+    message_obj = await message.answer(_('Сheck the goods'))
+    product = Product(url)
+
+    price, title = product.get_price_and_title(Shop(url))
     if not (isinstance(price, int) and title):
         return await message.answer(_('Something went wrong 😮‍💨, try again later'))
 
-    await find_and_save_good(user_id, price, title, url, shop.domain, message, bot)
-    await find_and_save_good_from_other_stores(title, shop.domain, message, bot)
+    await work_with_product(product, price, message, bot, message_obj)
 
 
 def register_user_handlers(dp: Dispatcher):

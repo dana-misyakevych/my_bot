@@ -1,15 +1,14 @@
 import asyncio
 import datetime
 
-import aiohttp
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.schedulers.background import BackgroundScheduler
 
 from bot.config import bot
 from bot.database.models.goods import UsersOrders, OrdersPrices, Order
-from bot.keyboards.custom_keyboards import show_shopping_cart
+from bot.keyboards.custom_keyboards import Keyboard
 from bot.middlewares.locale_middleware import get_text as _
-from bot.misc.pars import small_parser
+from bot.misc.pars import Product
 
 
 def scheduler():
@@ -38,7 +37,7 @@ async def users_notifier():
 
     for user in UsersOrders.get_users_with_new_price_status():
         orders = Order.get_orders_with_new_prices(user.user_id)
-        keyboard = show_shopping_cart(orders, 'order-name-new-price', price_status=True)
+        keyboard = Keyboard.show_shopping_cart(orders, 'order-name-new-price', price_status=True)
         await bot.send_message(user.user_id, text=_('The price of selected products has changed',
                                                     locale=user.language), reply_markup=keyboard)
 
@@ -68,7 +67,7 @@ async def schedule_pars():
 
     for order in orders:
         await asyncio.sleep(0.001)
-        task = asyncio.create_task(small_parser(order))
+        task = asyncio.create_task(Product(order.url.url).save_from_others_stores(ware_id=order.ware_id))
         tasks.append(task)
 
     await asyncio.gather(*tasks)
