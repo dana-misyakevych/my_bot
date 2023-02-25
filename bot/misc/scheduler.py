@@ -4,7 +4,7 @@ import datetime
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.schedulers.background import BackgroundScheduler
 
-from bot.config import bot
+from bot import config
 from bot.database.models.goods import UsersOrders, OrdersPrices, Order
 from bot.keyboards.custom_keyboards import Keyboard
 from bot.middlewares.locale_middleware import get_text as _
@@ -38,7 +38,7 @@ async def users_notifier():
     for user in UsersOrders.get_users_with_new_price_status():
         orders = Order.get_orders_with_new_prices(user.user_id)
         keyboard = Keyboard.show_shopping_cart(orders, 'order-name-new-price', price_status=True)
-        await bot.send_message(user.user_id, text=_('The price of selected products has changed',
+        await config.bot.send_message(user.user_id, text=_('The price of selected products has changed',
                                                     locale=user.language), reply_markup=keyboard)
 
 
@@ -77,8 +77,8 @@ async def ask_good_status():
 
     for user in UsersOrders.get_users_with_old_orders():
         orders = Order.get_second_last_month_orders(user.user_id)
-        keyboard = show_shopping_cart(orders, price_status=False, callback_data='order-name-old-order')
+        keyboard = Keyboard.show_shopping_cart(orders, price_status=False, callback_data='order-name-old-order')
         text = _("Hello, select the products you are still following, "
                  "Or leave it as it is", locale=user.language)
 
-        await bot.send_message(user.user_id, text=text, reply_markup=keyboard)
+        await config.bot.send_message(user.user_id, text=text, reply_markup=keyboard)

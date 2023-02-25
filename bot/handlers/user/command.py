@@ -1,6 +1,6 @@
 from aiogram import Dispatcher, types
 
-from bot.config import bot
+from bot import config
 from bot.database.models.goods import Order
 from bot.misc.functions import work_with_product
 from bot.keyboards.custom_keyboards import Keyboard
@@ -61,7 +61,7 @@ async def main_handler(message: types.Message):
     if not (isinstance(price, int) and title):
         return await message.answer(_('Something went wrong 😮‍💨, try again later'))
 
-    await work_with_product(product, price, message, bot, message_obj)
+    await work_with_product(product, price, message, config.bot, message_obj)
 
 
 def register_user_handlers(dp: Dispatcher):

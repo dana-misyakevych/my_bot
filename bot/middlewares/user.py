@@ -5,7 +5,7 @@ from aiogram.dispatcher.handler import CancelHandler
 from aiogram.dispatcher.middlewares import BaseMiddleware
 from aiogram.types import Message
 
-from bot.config import dp
+from bot import config
 from bot.database.models.goods import User
 from bot.data.texts import answers
 from bot.keyboards.reply_keyboards import help_kb
@@ -31,7 +31,7 @@ class UsersMiddleware(BaseMiddleware):
 
         if message.text[0] == '/':
 
-            commands = [x.command for x in await dp.bot.get_my_commands()]
+            commands = [x.command for x in await config.dp.bot.get_my_commands()]
             if message.text[1:] not in commands and message.text != '/start':
                 await message.answer(_('Unavailable command', locale=lang), reply_markup=help_kb)
                 raise CancelHandler()

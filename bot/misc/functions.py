@@ -1,57 +1,20 @@
-import datetime
+# -*- coding: utf-8 -*-
 import io
+import os
 import random
 import re
 
 import aiogram.types
-
+import matplotlib
+import matplotlib.font_manager as fm
 from typing import Optional, Union
 from matplotlib import pyplot as plt
+
 from peewee import ModelSelect
 from bot.middlewares.locale_middleware import get_text as _
 from bot.database.models.goods import Order, UsersOrders, OrdersPrices, User, Url
-from bot.data.texts import reply_to_start_tracking
 from bot.data import stores_info
 import tldextract as tldextract
-
-
-# def save_to_db(user_id: int, name: str, url: str, price: int, domain: list) -> str:
-#     ware_id = my_hash(name)
-#     today = datetime.date.today()
-#
-#     if not User.get_or_none(User.user_id == user_id):
-#         User.create(user_id=user_id).save()
-#
-#     if not Order.get_or_none(Order.name == name):
-#
-#         Order.create(ware_id=ware_id, name=name, date=today, url=url).save()
-#         UsersOrders.create(user_id=user_id, ware_id=ware_id, date=today).save()
-#         OrdersPrices.create(ware_id=ware_id, date=today, price=price, store=domain).save()
-#         Url.create(ware_id=ware_id, url=url)
-#         message = _(random.choice(reply_to_start_tracking))
-#
-#     else:
-#
-#         if UsersOrders.check_availability_on_user(user_id, ware_id):
-#             message = _('Already following 😎')
-#
-#         else:
-#
-#             UsersOrders.create(user_id=user_id, ware_id=ware_id, date=today).save()
-#             message = _('Started following 🫡')
-#
-#     return message
-
-
-# async def save_urls_and_prices_to_db(urls, prices, name):
-#     today = datetime.date.today()
-#     ware_id = my_hash(name)
-#     for url, price in zip(urls, prices):
-#
-#         store_name = tldextract.extract(url).domain
-#
-#         Url.create(ware_id=ware_id, url=url).save()
-#         OrdersPrices.create(ware_id=ware_id, date=today, price=price, store=store_name).save()
 
 
 def query_to_db(action: str, user_id=None) -> ModelSelect:
@@ -232,6 +195,7 @@ def get_info_for_build_plot(ware_id):
 
 
 def build_plot(ware_id):
+
     ware_name, date, stores = get_info_for_build_plot(ware_id)
     plt.style.use('seaborn')
     plt.title(ware_name)
@@ -262,10 +226,10 @@ def customize_plot(plt, stores, min_price):
     if len(stores) > 4:
         bottom_num = 0.17
 
-    # for line in plt.gca().get_lines():
-    #     prouct_info = line.get_label()
-    #     if prouct_info in min_price:
-    #         line.set_label(prouct_info)
+    for line in plt.gca().get_lines():
+        prouct_info = line.get_label()
+        if prouct_info in min_price:
+            line.set_label('💰' + prouct_info)
 
     plt.subplots_adjust(bottom=bottom_num, top=0.92)
     legend = plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05), fancybox=True, shadow=True, ncol=5,

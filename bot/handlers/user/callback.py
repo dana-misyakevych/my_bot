@@ -1,10 +1,8 @@
 from aiogram import types, Dispatcher
 from aiogram.dispatcher.filters import Text
 
-from bot.config import bot
+from bot import config
 from bot.database.models.goods import UsersOrders, Order, User
-# from bot.keyboards.custom_keyboards import url_kb, show_shopping_cart, \
-#     choice_kb, language_keyboard, order_from_diff_stores, list_of_shops
 from bot.keyboards.custom_keyboards import Keyboard
 
 from bot.middlewares.throttling import rate_limit
@@ -48,7 +46,7 @@ async def show_plot_price(callback: types.CallbackQuery):
 
     photo = plot_graph(c.ware_id)
     keyboard = Keyboard.url_kb(c.ware_id, c.param)
-    await bot.send_photo(c.user_id, photo, reply_markup=keyboard)
+    await config.bot.send_photo(c.user_id, photo, reply_markup=keyboard)
     await callback.answer()
 
 
