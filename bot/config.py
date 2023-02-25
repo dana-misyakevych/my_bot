@@ -63,7 +63,7 @@ def main():
             on_startup=on_startup,
             on_shutdown=on_shutdown,
             skip_updates=True,
-            host=WEBHOOK_HOST,
+            host=WEBAPP_HOST,
             port=WEBAPP_PORT
         )
 
