@@ -3,4 +3,4 @@ draft.py
 *.db
 .idea
 *.log
-bot/date/.env
+.env
