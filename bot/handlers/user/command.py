@@ -56,8 +56,9 @@ async def main_handler(message: types.Message):
 
     message_obj = await message.answer(_('Сheck the goods'))
     product = Product(url)
+    shop = Shop(url)
 
-    price, title = product.get_price_and_title(Shop(url))
+    price, title = product.get_price_and_title(shop)
     if not (isinstance(price, int) and title):
         return await message.answer(_('Something went wrong 😮‍💨, try again later'))
 
