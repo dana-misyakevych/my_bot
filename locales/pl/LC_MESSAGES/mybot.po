@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-02-08 14:22+0200\n"
-"PO-Revision-Date: 2023-02-08 14:24+0200\n"
+"POT-Creation-Date: 2023-02-25 23:14+0200\n"
+"PO-Revision-Date: 2023-02-25 23:16+0200\n"
 "Last-Translator: \n"
 "Language-Team: pl <LL@li.org>\n"
 "Language: pl\n"
@@ -21,11 +21,10 @@ msgstr ""
 "X-Generator: Poedit 3.2.2\n"
 
 #: bot/data/texts.py:4
-#, fuzzy
 msgid "\"Just a link enough 😤\""
-msgstr "Wystarczy link 😤"
+msgstr "Wystarczy link"
 
-#: bot/data/texts.py:12 bot/misc/functions.py:45
+#: bot/data/texts.py:12 bot/misc/pars.py:124
 msgid "Started following 🫡"
 msgstr "Zaczęto śledzić 🫡"
 
@@ -49,48 +48,51 @@ msgstr ""
 "<b>/language</b> - <em>Język</em>\n"
 "<b>/stores</b> - Lista <em>dostępnych sklepów</em>"
 
-#: bot/handlers/user/callback.py:25 bot/handlers/user/callback.py:34
+#: bot/handlers/user/callback.py:27 bot/handlers/user/callback.py:36
 msgid "Done!"
 msgstr "Gotowe!"
 
-#: bot/handlers/user/callback.py:30 bot/handlers/user/callback.py:85
-#, fuzzy
+#: bot/handlers/user/callback.py:32 bot/handlers/user/callback.py:88
 msgid "Your cart is empty"
-msgstr "Twój koszyk jest pusty 🧐"
+msgstr "Twój koszyk jest pusty"
 
-#: bot/handlers/user/callback.py:43
+#: bot/handlers/user/callback.py:45
 msgid "You don't have this product🧐"
 msgstr "Nie masz tego produktu🧐"
 
-#: bot/handlers/user/command.py:27
+#: bot/handlers/user/command.py:28
 msgid "Shops are available: "
 msgstr "Dostępne są sklepy: "
 
-#: bot/handlers/user/command.py:37
+#: bot/handlers/user/command.py:38
 msgid "Your cart is empty 🧐"
 msgstr "Twój koszyk jest pusty 🧐"
 
-#: bot/handlers/user/command.py:40
+#: bot/handlers/user/command.py:41
 msgid "Here's your shopping cart:"
 msgstr "Oto twój koszyk:"
 
-#: bot/handlers/user/command.py:61 bot/middlewares/user.py:46
+#: bot/handlers/user/command.py:57
+msgid "Сheck the goods"
+msgstr "Sprawdzić towary"
+
+#: bot/handlers/user/command.py:63 bot/middlewares/user.py:46
 msgid "Something went wrong 😮‍💨, try again later"
 msgstr "Coś poszło nie tak 😮💨, spróbuj ponownie później"
 
-#: bot/keyboards/custom_keyboards.py:65 bot/keyboards/custom_keyboards.py:83
+#: bot/keyboards/custom_keyboards.py:81 bot/keyboards/custom_keyboards.py:136
 msgid "Keep"
 msgstr "Zachowaj"
 
-#: bot/keyboards/custom_keyboards.py:66 bot/keyboards/custom_keyboards.py:84
+#: bot/keyboards/custom_keyboards.py:82 bot/keyboards/custom_keyboards.py:138
 msgid "Delete🙇‍♂️"
 msgstr "Usuń🙇♂️"
 
-#: bot/keyboards/custom_keyboards.py:74
+#: bot/keyboards/custom_keyboards.py:127
 msgid "Delete"
 msgstr "Usuń"
 
-#: bot/keyboards/custom_keyboards.py:75
+#: bot/keyboards/custom_keyboards.py:128
 msgid "Buy"
 msgstr "Kup"
 
@@ -98,15 +100,23 @@ msgstr "Kup"
 msgid "Unavailable command"
 msgstr "Niedostępne polecenie"
 
-#: bot/misc/functions.py:40
+#: bot/misc/functions.py:120
+msgid "Looking for goods in other stores"
+msgstr "Szukanie towarów w innych sklepach"
+
+#: bot/misc/functions.py:121
+msgid "Here's what I found"
+msgstr "Oto co znalazłem"
+
+#: bot/misc/pars.py:119
 msgid "Already following 😎"
 msgstr "Already following 😎"
 
-#: bot/misc/scheduler.py:42
+#: bot/misc/scheduler.py:41
 msgid "The price of selected products has changed"
 msgstr "Cena wybranych produktów uległa zmianie"
 
-#: bot/misc/scheduler.py:82
+#: bot/misc/scheduler.py:81
 msgid "Hello, select the products you are still following, Or leave it as it is"
 msgstr ""
 "Witaj, wybierz produkty, które nadal śledzisz, lub pozostaw je tak jak jest"

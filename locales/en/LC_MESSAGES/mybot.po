@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-02-08 14:22+0200\n"
+"POT-Creation-Date: 2023-02-25 23:14+0200\n"
 "PO-Revision-Date: 2023-01-17 14:20+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "\"Just a link enough 😤\""
 msgstr ""
 
-#: bot/data/texts.py:12 bot/misc/functions.py:45
+#: bot/data/texts.py:12 bot/misc/pars.py:124
 msgid "Started following 🫡"
 msgstr ""
 
@@ -38,47 +38,51 @@ msgid ""
 "<b>/stores</b> - <em>List of available stores</em>"
 msgstr ""
 
-#: bot/handlers/user/callback.py:25 bot/handlers/user/callback.py:34
+#: bot/handlers/user/callback.py:27 bot/handlers/user/callback.py:36
 msgid "Done!"
 msgstr ""
 
-#: bot/handlers/user/callback.py:30 bot/handlers/user/callback.py:85
+#: bot/handlers/user/callback.py:32 bot/handlers/user/callback.py:88
 msgid "Your cart is empty"
 msgstr ""
 
-#: bot/handlers/user/callback.py:43
+#: bot/handlers/user/callback.py:45
 msgid "You don't have this product🧐"
 msgstr ""
 
-#: bot/handlers/user/command.py:27
+#: bot/handlers/user/command.py:28
 msgid "Shops are available: "
 msgstr ""
 
-#: bot/handlers/user/command.py:37
+#: bot/handlers/user/command.py:38
 msgid "Your cart is empty 🧐"
 msgstr ""
 
-#: bot/handlers/user/command.py:40
+#: bot/handlers/user/command.py:41
 msgid "Here's your shopping cart:"
 msgstr ""
 
-#: bot/handlers/user/command.py:61 bot/middlewares/user.py:46
+#: bot/handlers/user/command.py:57
+msgid "Сheck the goods"
+msgstr ""
+
+#: bot/handlers/user/command.py:63 bot/middlewares/user.py:46
 msgid "Something went wrong 😮‍💨, try again later"
 msgstr ""
 
-#: bot/keyboards/custom_keyboards.py:65 bot/keyboards/custom_keyboards.py:83
+#: bot/keyboards/custom_keyboards.py:81 bot/keyboards/custom_keyboards.py:136
 msgid "Keep"
 msgstr ""
 
-#: bot/keyboards/custom_keyboards.py:66 bot/keyboards/custom_keyboards.py:84
+#: bot/keyboards/custom_keyboards.py:82 bot/keyboards/custom_keyboards.py:138
 msgid "Delete🙇‍♂️"
 msgstr ""
 
-#: bot/keyboards/custom_keyboards.py:74
+#: bot/keyboards/custom_keyboards.py:127
 msgid "Delete"
 msgstr ""
 
-#: bot/keyboards/custom_keyboards.py:75
+#: bot/keyboards/custom_keyboards.py:128
 msgid "Buy"
 msgstr ""
 
@@ -86,15 +90,23 @@ msgstr ""
 msgid "Unavailable command"
 msgstr ""
 
-#: bot/misc/functions.py:40
+#: bot/misc/functions.py:120
+msgid "Looking for goods in other stores"
+msgstr ""
+
+#: bot/misc/functions.py:121
+msgid "Here's what I found"
+msgstr ""
+
+#: bot/misc/pars.py:119
 msgid "Already following 😎"
 msgstr ""
 
-#: bot/misc/scheduler.py:42
+#: bot/misc/scheduler.py:41
 msgid "The price of selected products has changed"
 msgstr ""
 
-#: bot/misc/scheduler.py:82
+#: bot/misc/scheduler.py:81
 msgid "Hello, select the products you are still following, Or leave it as it is"
 msgstr ""
 

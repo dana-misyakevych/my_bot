@@ -10,5 +10,4 @@ python-dotenv~=0.21.0
 tldextract~=3.4.0
 Babel
 aiohttp~=3.8.3
-bs4~=0.0.1
 google==3.0.0
