@@ -31,7 +31,7 @@ WEBHOOK_PATH = BOT_TOKEN
 async def on_startup(_):
 
     if DEPLOY:
-        await bot.set_webhook(url=APP_URL + BOT_TOKEN)
+        await bot.set_webhook(url=APP_URL)
 
     init_db()
     scheduler()
