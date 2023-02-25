@@ -5,7 +5,6 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.utils import executor
 from dotenv import load_dotenv
 
-from bot.data import data_path
 from bot.database.models.goods import init_db
 from bot.handlers import register_all_handlers
 from bot.middlewares import setup_middleware
@@ -16,6 +15,7 @@ from aiogram.utils.executor import start_webhook
 
 DEPLOY = os.environ.get('DEPLOY', False)
 if not DEPLOY:
+    from bot.data import data_path
     load_dotenv(dotenv_path=f'{data_path}/.env')
 
 BOT_TOKEN = str(os.environ.get('BOT_TOKEN'))
