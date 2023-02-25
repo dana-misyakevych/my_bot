@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-02-25 23:14+0200\n"
+"POT-Creation-Date: 2023-02-25 23:19+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,14 +18,14 @@ msgstr ""
 "Generated-By: Babel 2.11.0\n"
 
 #: bot/data/texts.py:4
-msgid "\"Just a link enough 😤\""
+msgid "Just a link enough 😤"
 msgstr ""
 
-#: bot/data/texts.py:12 bot/misc/pars.py:124
+#: bot/data/texts.py:9 bot/misc/pars.py:124
 msgid "Started following 🫡"
 msgstr ""
 
-#: bot/data/texts.py:16
+#: bot/data/texts.py:13
 msgid ""
 "Greetings! To work with the bot, just drop the link\n"
 "for the product you are interested in\n"
