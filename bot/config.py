@@ -16,7 +16,7 @@ from aiogram.utils.executor import start_webhook
 DEPLOY = os.environ.get('DEPLOY', False)
 if not DEPLOY:
     from bot.data import data_path
-    load_dotenv(dotenv_path=f'{data_path}/.env')
+    load_dotenv(dotenv_path=f'{data_path.parent.parent}/.env')
 
 BOT_TOKEN = str(os.environ.get('BOT_TOKEN'))
 ADMIN_ID = os.getenv('ADMIN_ID')

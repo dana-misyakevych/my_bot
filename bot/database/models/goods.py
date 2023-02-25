@@ -1,10 +1,12 @@
 from babel.core import Locale
 from peewee import CharField, DateTimeField, ForeignKeyField, IntegerField
 from peewee import Model, SqliteDatabase
+
+from bot.data import data_path
 from bot.utils.date_func import last_month, get_yesterday_today_date
 
-database = SqliteDatabase('/home/oleh/PycharmProjects/tsinovyk/bot/database/all_data.db')
 
+database = SqliteDatabase(f'{data_path.parent}/database/all_data.db')
 
 class BaseModel(Model):
     class Meta:
