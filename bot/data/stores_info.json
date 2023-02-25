@@ -1,7 +1,7 @@
 {
 
 
-        "rozetka": ["product-prices__big", "product__title", "Розетка", "https://rozetka.com.ua/ua/", "#05bc52"],
+        "rozetka": ["product-price__big", "product__title", "Розетка", "https://rozetka.com.ua/ua/", "#05bc52"],
         "ctrs": ["price", "0re-title-0-2", "Цитрус", "https://www.ctrs.com.ua/","#ff680a"],
         "telemart": ["b-i-product-topshort-buy-card-inner", "b-page-title", "Телемарт", "https://telemart.ua/ua/","#a2c617"],
         "allo": ["sum", "p-view__header-title", "Алло", "https://allo.ua/","#e00027"],

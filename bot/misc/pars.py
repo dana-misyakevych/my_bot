@@ -35,7 +35,7 @@ class Product:
         try:
             resp.encoding = resp.apparent_encoding
             f = BeautifulSoup(resp.text, "lxml")
-            print(shop.product_price_class, shop.product_title_class)
+
             product_price = f.find(class_=shop.product_price_class).text
             self.product_title = f.find(class_=shop.product_title_class).text
             self.ware_id = my_hash(self.product_title)
@@ -93,6 +93,7 @@ class Product:
 
                 if isinstance(price, int):
                     if not Url.get_or_none(Url.ware_id == ware_id):
+
                         Url.create(ware_id=ware_id, url=url).save()
                     OrdersPrices.create(ware_id=ware_id, date=datetime.date.today(), price=price,
                                         store=shop.domain).save()

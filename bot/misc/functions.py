@@ -1,18 +1,14 @@
 # -*- coding: utf-8 -*-
 import io
-import os
-import random
 import re
 
 import aiogram.types
-import matplotlib
-import matplotlib.font_manager as fm
 from typing import Optional, Union
 from matplotlib import pyplot as plt
 
 from peewee import ModelSelect
 from bot.middlewares.locale_middleware import get_text as _
-from bot.database.models.goods import Order, UsersOrders, OrdersPrices, User, Url
+from bot.database.models.goods import Order, OrdersPrices
 from bot.data import stores_info
 import tldextract as tldextract
 
@@ -159,8 +155,6 @@ class Shop:
         if '0re-' == second_params[:4]:
             params = [params[0], re.compile(r"^{}".format(second_params[4:])), *params[2:]]
 
-        print(params)
-
         return domain, params
 
     def __bool__(self):
@@ -226,10 +220,10 @@ def customize_plot(plt, stores, min_price):
     if len(stores) > 4:
         bottom_num = 0.17
 
-    for line in plt.gca().get_lines():
-        prouct_info = line.get_label()
-        if prouct_info in min_price:
-            line.set_label('💰' + prouct_info)
+    # for line in plt.gca().get_lines():
+    #     prouct_info = line.get_label()
+    #     if prouct_info in min_price:
+    #         line.set_label(prouct_info)
 
     plt.subplots_adjust(bottom=bottom_num, top=0.92)
     legend = plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05), fancybox=True, shadow=True, ncol=5,
