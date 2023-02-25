@@ -1,12 +1,9 @@
-import json
 import os
 
-from aiogram import Bot, Dispatcher, types
+from aiogram import Bot, Dispatcher
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
-from aiogram.types import Update
 from aiogram.utils import executor
 from dotenv import load_dotenv
-from flask import Flask, request, abort
 
 from bot.data import data_path
 from bot.database.models.goods import init_db
@@ -29,11 +26,11 @@ dp = Dispatcher(bot, storage=MemoryStorage())
 WEBHOOK_PORT = 8080
 
 WEBHOOK_HOST = 'https://tsinovyk.herokuapp.com/'
-WEBHOOK_PATH = BOT_TOKEN
+WEBHOOK_PATH = f'/webhook/{BOT_TOKEN}'
 WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
 
 WEBAPP_HOST = 'localhost'  # or ip
-WEBAPP_PORT = 3001
+WEBAPP_PORT = int(os.getenv('PORT', 5000))
 
 
 async def on_startup(_):
@@ -61,7 +58,7 @@ def main():
     if DEPLOY:
         start_webhook(
             dispatcher=dp,
-            webhook_path='',
+            webhook_path=WEBHOOK_PATH,
             on_startup=on_startup,
             on_shutdown=on_shutdown,
             skip_updates=True,
