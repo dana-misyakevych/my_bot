@@ -34,6 +34,8 @@ WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
 
 WEBAPP_HOST = 'localhost'  # or ip
 WEBAPP_PORT = 3001
+
+
 async def on_startup(_):
 
     if DEPLOY:
@@ -52,6 +54,7 @@ async def on_shutdown(_):
     await bot.delete_webhook()
     await dp.storage.close()
     await dp.storage.wait_closed()
+
 
 def main():
 
