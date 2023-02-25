@@ -1,0 +1,20 @@
+{
+
+
+        "rozetka": ["product-prices__big", "product__title", "Розетка", "https://rozetka.com.ua/ua/", "#05bc52"],
+        "ctrs": ["price", "0re-title-0-2", "Цитрус", "https://www.ctrs.com.ua/","#ff680a"],
+        "telemart": ["b-i-product-topshort-buy-card-inner", "b-page-title", "Телемарт", "https://telemart.ua/ua/","#a2c617"],
+        "allo": ["sum", "p-view__header-title", "Алло", "https://allo.ua/","#e00027"],
+        "moyo": ["product_price_current", "product_name", "MOYO", "https://www.moyo.ua/ua/","#00b2f2"],
+        "nashformat": ["product-price", "col-lg-8", "Наш Формат","https://nashformat.ua/", "#e85146"],
+        "comfy": ["price__current", "gen-tab__name", "Comfy", "https://comfy.ua/ua/","#4fb342"],
+        "foxtrot": ["product-box__main_price", "page__title overflow", "Фокстрот", "https://www.foxtrot.com.ua/uk", "#e95d2a"],
+        "epicentrk": ["p-price__main", "p-header__title nc", "Епіцентр", "https://epicentrk.ua/","#1060c1"],
+        "zhuk": ["product-price__item product-price__item--new", "product-title", "ЖЖУК", "https://zhuk.ua/","#80338e"],
+        "makeup": ["product-item__price", "product-item__category", "MAKEUP", "https://makeup.com.ua/ua/","#282828"],
+        "apteka911": ["price-new", "product-head-instr tl", "Apteka911", "https://apteka911.ua/ua","#a82420"],
+        "add": ["price", "base", "ADD", "https://www.add.ua/", "#06ab54"],
+        "kasta": ["p__price", "p__pads", "Kasta", "https://kasta.ua/uk/","#34353c"],
+        "yakaboo": ["ui-price-display__main", "base-product__title", "Yakaboo", "https://www.yakaboo.ua/","#ea33c0"]
+
+}
