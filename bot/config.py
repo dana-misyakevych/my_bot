@@ -30,7 +30,7 @@ WEBHOOK_HOST = 'https://tsinovyk.herokuapp.com/'
 WEBHOOK_PATH = ''
 WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
 
-WEBAPP_HOST = 'localhost'  # or ip
+WEBAPP_HOST = '0.0.0.0'  # or ip
 WEBAPP_PORT = int(os.getenv('PORT', 5000))
 
 
