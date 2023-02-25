@@ -14,6 +14,7 @@ from bot.handlers import register_all_handlers
 from bot.middlewares import setup_middleware
 from bot.misc.scheduler import scheduler
 from bot.utils.set_commands import set_bot_commands
+from aiogram.utils.executor import start_webhook
 
 load_dotenv(dotenv_path=f'{data_path}/.env')
 APP_URL = 'https://tsinovyk.herokuapp.com/'
@@ -52,7 +53,7 @@ async def on_shutdown(_):
 def main():
 
     if DEPLOY:
-        executor.set_webhook(
+        start_webhook(
             dispatcher=dp,
             webhook_path='',
             on_startup=on_startup,
