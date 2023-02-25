@@ -1,9 +1,13 @@
+import json
 import os
 
-from aiogram import Bot, Dispatcher
+from aiogram import Bot, Dispatcher, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
+from aiogram.types import Update
 from aiogram.utils import executor
 from dotenv import load_dotenv
+from flask import Flask, request, abort
+
 from bot.data import data_path
 from bot.database.models.goods import init_db
 from bot.handlers import register_all_handlers
@@ -26,7 +30,6 @@ dp = Dispatcher(bot, storage=MemoryStorage())
 WEBHOOK_PORT = 8080
 WEBHOOK_HOST = ''
 WEBHOOK_PATH = BOT_TOKEN
-
 
 async def on_startup(_):
 
@@ -55,6 +58,8 @@ def main():
             on_startup=on_startup,
             on_shutdown=on_shutdown,
             skip_updates=True,
+            host="0.0.0.0",
+            port=5000
         )
 
     else:
