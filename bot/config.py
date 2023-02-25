@@ -17,8 +17,6 @@ from bot.utils.set_commands import set_bot_commands
 from aiogram.utils.executor import start_webhook
 
 load_dotenv(dotenv_path=f'{data_path}/.env')
-APP_URL = 'https://tsinovyk.herokuapp.com/'
-
 
 DEPLOY = os.environ.get('DEPLOY', False)
 
@@ -29,13 +27,17 @@ bot = Bot(BOT_TOKEN, parse_mode='HTML')
 dp = Dispatcher(bot, storage=MemoryStorage())
 
 WEBHOOK_PORT = 8080
-WEBHOOK_HOST = ''
-WEBHOOK_PATH = BOT_TOKEN
 
+WEBHOOK_HOST = 'https://tsinovyk.herokuapp.com/'
+WEBHOOK_PATH = BOT_TOKEN
+WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
+
+WEBAPP_HOST = 'localhost'  # or ip
+WEBAPP_PORT = 3001
 async def on_startup(_):
 
     if DEPLOY:
-        await bot.set_webhook(url=APP_URL)
+        await bot.set_webhook(url=WEBHOOK_URL)
 
     init_db()
     scheduler()
@@ -48,7 +50,8 @@ async def on_startup(_):
 async def on_shutdown(_):
 
     await bot.delete_webhook()
-
+    await dp.storage.close()
+    await dp.storage.wait_closed()
 
 def main():
 
@@ -59,8 +62,8 @@ def main():
             on_startup=on_startup,
             on_shutdown=on_shutdown,
             skip_updates=True,
-            host="0.0.0.0",
-            port=5000
+            host=WEBHOOK_HOST,
+            port=WEBAPP_PORT
         )
 
     else:
