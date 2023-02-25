@@ -36,7 +36,7 @@ WEBAPP_PORT = int(os.getenv('PORT', 5000))
 async def on_startup(_):
 
     if DEPLOY:
-        await bot.set_webhook(url=WEBHOOK_URL)
+        await bot.set_webhook(url=WEBHOOK_URL, drop_pending_updates=True)
 
     init_db()
     scheduler()
