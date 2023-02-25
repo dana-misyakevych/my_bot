@@ -1,4 +1,4 @@
-aiogram==2.23.1
+aiogram
 beautifulsoup4==4.11.1
 fake-headers==1.0.2
 lxml==4.9.1
