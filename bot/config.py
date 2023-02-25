@@ -13,9 +13,10 @@ from bot.misc.scheduler import scheduler
 from bot.utils.set_commands import set_bot_commands
 from aiogram.utils.executor import start_webhook
 
-load_dotenv(dotenv_path=f'{data_path}/.env')
 
 DEPLOY = os.environ.get('DEPLOY', False)
+if not DEPLOY:
+    load_dotenv(dotenv_path=f'{data_path}/.env')
 
 BOT_TOKEN = str(os.environ.get('BOT_TOKEN'))
 ADMIN_ID = os.getenv('ADMIN_ID')
