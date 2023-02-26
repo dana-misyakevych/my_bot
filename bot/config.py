@@ -6,7 +6,6 @@ from aiogram.utils import executor
 from dotenv import load_dotenv
 
 from bot.database.models.goods import init_db
-from bot.handlers import register_all_handlers
 from bot.middlewares import setup_middleware
 from bot.misc.scheduler import scheduler
 from bot.utils.set_commands import set_bot_commands
@@ -35,6 +34,7 @@ WEBAPP_PORT = int(os.getenv('PORT', 5000))
 
 
 async def on_startup(_):
+    from bot.handlers import register_all_handlers
 
     if DEPLOY:
         await bot.set_webhook(url=WEBHOOK_URL, drop_pending_updates=True)

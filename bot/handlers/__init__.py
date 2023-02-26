@@ -1,13 +1,13 @@
 from aiogram import Dispatcher
-from bot.handlers.user.callback import register_callback_handlers
-from bot.handlers.user.command import register_user_handlers
+from bot.handlers.user import callback
+from bot.handlers.user import command
 
 
 def register_all_handlers(dp: Dispatcher):
 
     handlers = [
-        register_user_handlers,
-        register_callback_handlers,
+        command.register_user_handlers,
+        callback.register_callback_handlers,
     ]
 
     for handler in handlers:

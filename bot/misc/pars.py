@@ -92,8 +92,7 @@ class Product:
                     logg.exception(f'{e}, {url}, {shop.product_price_class, shop.product_title_class}')
 
                 if isinstance(price, int):
-                    if not Url.get_or_none(Url.ware_id == ware_id):
-
+                    if not Url.get_or_none(Url.url == url):
                         Url.create(ware_id=ware_id, url=url).save()
                     OrdersPrices.create(ware_id=ware_id, date=datetime.date.today(), price=price,
                                         store=shop.domain).save()

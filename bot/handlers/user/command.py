@@ -51,6 +51,7 @@ async def set_language(message: types.Message):
 
 
 @rate_limit(limit=6)
+@config.dp.async_task
 async def main_handler(message: types.Message):
     url = message.text
 
