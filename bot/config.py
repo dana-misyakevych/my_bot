@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 from aiogram import Bot, Dispatcher
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
@@ -6,16 +7,16 @@ from aiogram.utils import executor
 from dotenv import load_dotenv
 
 from bot.database.models.goods import init_db
-from bot.middlewares import setup_middleware
-from bot.misc.scheduler import scheduler
+from . import middlewares
+from bot.misc import scheduler
 from bot.utils.set_commands import set_bot_commands
 from aiogram.utils.executor import start_webhook
 
 
 DEPLOY = os.environ.get('DEPLOY', False)
+
 if not DEPLOY:
-    from bot.data import data_path
-    load_dotenv(dotenv_path=f'{data_path.parent.parent}/.env')
+    load_dotenv(dotenv_path=f'{Path(__file__).parent.parent}/.env')
 
 BOT_TOKEN = str(os.environ.get('BOT_TOKEN'))
 ADMIN_ID = os.getenv('ADMIN_ID')
@@ -40,8 +41,8 @@ async def on_startup(_):
         await bot.set_webhook(url=WEBHOOK_URL, drop_pending_updates=True)
 
     init_db()
-    scheduler()
-    setup_middleware(dp)
+    scheduler.scheduler(bot)
+    middlewares.setup_middleware(dp)
     register_all_handlers(dp)
 
     await set_bot_commands(dp)
@@ -56,17 +57,15 @@ async def on_shutdown(_):
 
 def main():
 
-    if DEPLOY:
-        start_webhook(
-            dispatcher=dp,
-            webhook_path=WEBHOOK_PATH,
-            on_startup=on_startup,
-            on_shutdown=on_shutdown,
-            skip_updates=True,
-            host=WEBAPP_HOST,
-            port=WEBAPP_PORT
-        )
-
-    else:
+    if not DEPLOY:
         executor.start_polling(dp, skip_updates=True, on_startup=on_startup)
 
+    start_webhook(
+        dispatcher=dp,
+        webhook_path=WEBHOOK_PATH,
+        on_startup=on_startup,
+        on_shutdown=on_shutdown,
+        skip_updates=True,
+        host=WEBAPP_HOST,
+        port=WEBAPP_PORT
+    )

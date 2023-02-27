@@ -1,13 +1,13 @@
 aiogram
+Babel
+matplotlib
 beautifulsoup4==4.11.1
 fake-headers==1.0.2
 lxml==4.9.1
-matplotlib
 peewee==3.15.4
 requests==2.28.1
 APScheduler~=3.9.1.post1
 python-dotenv~=0.21.0
 tldextract~=3.4.0
-Babel
 aiohttp~=3.8.3
 google==3.0.0

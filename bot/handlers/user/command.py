@@ -61,7 +61,8 @@ async def main_handler(message: types.Message):
 
     price, title = product.get_price_and_title(shop)
     if not (isinstance(price, int) and title):
-        await config.bot.edit_message_text(_('Something went wrong 😮‍💨, try again later'), message_id=message_obj.message_id, chat_id=message.chat.id)
+        await config.bot.edit_message_text(
+            _('Something went wrong 😮‍💨, try again later'), message_id=message_obj.message_id, chat_id=message.chat.id)
 
     await work_with_product(product, price, message, config.bot, message_obj)
 

@@ -1,12 +1,11 @@
 from babel.core import Locale
 from peewee import CharField, DateTimeField, ForeignKeyField, IntegerField
 from peewee import Model, SqliteDatabase
-
-from bot.data import data_path
 from bot.utils.date_func import last_month, get_yesterday_today_date
+from pathlib import Path
 
+database = SqliteDatabase(f'{Path(__file__).parent.parent}/all_data.db')
 
-database = SqliteDatabase(f'{data_path.parent}/database/all_data.db')
 
 class BaseModel(Model):
     class Meta:
@@ -144,9 +143,17 @@ class OrdersPrices(BaseModel):
     def get_yesterday_today_prices(cls):
         yesterday, today = get_yesterday_today_date()
 
-        return cls.select(cls.ware_id, cls.price, cls.date) \
-            .where((cls.date == yesterday) | (cls.date == today)) \
-            .order_by(cls.ware_id)
+        t1 = cls.alias()
+        t2 = cls.alias()
+
+        query = (t1
+                 .select(t1.ware_id, t1.store, t1.date, t1.price, t2.price)
+                 .join(t2, on=((t1.ware_id == t2.ware_id) & (t1.store == t2.store) & (t1.date == yesterday) & (
+                    t2.date == today)))
+                 .where(t1.date == yesterday, t1.price != t2.price)
+                 .order_by(t1.ware_id, t1.store))
+
+        return query
 
     @classmethod
     def get_last_moth_prices(cls, ware_id):
