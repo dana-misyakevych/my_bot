@@ -42,16 +42,12 @@ async def users_notifier(bot):
 
 
 def schedule_price_check():
-
     yesterday_today_price = OrdersPrices.get_yesterday_today_prices()
-    print(yesterday_today_price)
 
-    for price in yesterday_today_price:
-        print(1)
-        print(price)
-        price_status = price.price - price.price2
-        if price_status != 0:
-            OrdersPrices.update_price_status(price_status, price.ware_id)
+    for row in yesterday_today_price:
+
+        if row.price_diff != 0:
+            OrdersPrices.update_price_status(row.price_diff, row.ware_id)
 
 
 async def schedule_pars():

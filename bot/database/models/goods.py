@@ -146,12 +146,24 @@ class OrdersPrices(BaseModel):
         t1 = cls.alias()
         t2 = cls.alias()
 
-        query = (t1
-                 .select(t1.ware_id, t1.store, t1.date, t1.price, t2.price)
-                 .join(t2, on=((t1.ware_id == t2.ware_id) & (t1.store == t2.store) & (t1.date == yesterday) & (
-                    t2.date == today)))
-                 .where(t1.date == yesterday, t1.price != t2.price)
-                 .order_by(t1.ware_id, t1.store))
+        query = (
+                t1
+                .select(
+                    t1.ware_id,
+                    t1.store,
+                    t1.price.alias('price_t1'),
+                    t2.price.alias('price_t2'),
+                    (t1.price - t2.price).alias('price_diff')
+                )
+                .join(t2, on=(
+                    (t1.ware_id == t2.ware_id) &
+                    (t1.store == t2.store) &
+                    (t1.date == yesterday) &
+                    (t2.date == today)
+                ))
+                .where((t1.date == yesterday) & (t1.price != t2.price))
+                .order_by(t1.ware_id, t1.store)
+)
 
         return query
 
