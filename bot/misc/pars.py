@@ -41,10 +41,7 @@ class Product:
                 "https": os.environ.get('FIXIE_URL', '')
             }
 
-            url = "https://telebears.berkeley.edu/enrollment-osoc/osc"
-            code = "26187"
-            values = dict(_InField1="RESTRIC", _InField2=code, _InField3="13D2")
-            resp = requests.get(url, params=values, proxies=proxyDict, headers=user_agent)
+            resp = requests.get(self.url, proxies=proxyDict, headers=user_agent)
 
             logg.error(f'{self.url}, {shop.product_title_class, shop.product_price_class}, {resp.status_code}')
 
