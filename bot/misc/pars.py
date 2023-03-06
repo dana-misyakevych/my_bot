@@ -8,6 +8,7 @@ import requests
 import tldextract
 from bs4 import BeautifulSoup
 from fake_headers import Headers
+from fp.fp import FreeProxy
 
 from bot.data.texts import reply_to_start_tracking
 from bot.database.models.goods import OrdersPrices, Url, User, Order, UsersOrders
@@ -23,31 +24,30 @@ class Product:
         self.product_title = None
         self.ware_id = None
 
-    async def get_price_and_title(self, shop):
+    def get_price_and_title(self, shop):
 
         user_agent = Headers(headers=True).generate()
         user_agent['Accept-Encoding'] = 'identity'
-        connector = aiohttp.TCPConnector(force_close=True)
-        print(user_agent)
-        async with aiohttp.ClientSession(connector=connector) as session:
-            async with session.get(self.url, headers=user_agent) as response:
+        resp = requests.get(self.url, headers=user_agent)
 
-                if not response.ok:
-                    logg.error(f'{self.url}, {shop.product_title_class, shop.product_price_class}, {response.status}')
+        if not resp.ok:
+            logg.error(f'{self.url}, {shop.product_title_class, shop.product_price_class}, {resp.status_code}')
+            proxy = FreeProxy(anonym=True).get()
+            resp = requests.get(self.url, headers=user_agent, proxies=proxy)
 
-                try:
-                    # resp.encoding = resp.apparent_encoding
-                    f = BeautifulSoup(await response.text(), "lxml")
+        try:
+            resp.encoding = resp.apparent_encoding
+            f = BeautifulSoup(resp.text, "lxml")
 
-                    product_price = f.find(class_=shop.product_price_class).text
-                    self.product_title = f.find(class_=shop.product_title_class).text
-                    self.ware_id = my_hash(self.product_title)
+            product_price = f.find(class_=shop.product_price_class).text
+            self.product_title = f.find(class_=shop.product_title_class).text
+            self.ware_id = my_hash(self.product_title)
 
-                    return clear_price(product_price.strip()), self.product_title.strip()
+            return clear_price(product_price.strip()), self.product_title.strip()
 
-                except AttributeError as e:
-                    logg.exception(f'{e}, {self.url}, {shop.product_price_class, shop.product_title_class}')
-                    return False, False
+        except AttributeError as e:
+            logg.exception(f'{e}, {self.url}, {shop.product_price_class, shop.product_title_class}')
+            return False, False
 
     async def find_in_another_store(self):
 
