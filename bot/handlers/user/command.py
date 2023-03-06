@@ -59,7 +59,7 @@ async def main_handler(message: types.Message):
     product = Product(url)
     shop = Shop(url)
 
-    price, title = product.get_price_and_title(shop)
+    price, title = await product.get_price_and_title(shop)
     if not (isinstance(price, int) and title):
         await config.bot.edit_message_text(
             _('Something went wrong 😮‍💨, try again later'), message_id=message_obj.message_id, chat_id=message.chat.id)
