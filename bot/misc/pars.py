@@ -28,11 +28,11 @@ class Product:
 
         user_agent = Headers(headers=True).generate()
         user_agent['Accept-Encoding'] = 'identity'
-        resp = requests.get(self.url, headers=user_agent)
+        # resp = requests.get(self.url, headers=user_agent)
+        resp = requests.get(self.url, headers=user_agent, proxies=self.set_proxy())
 
         if not resp.ok:
             logg.error(f'{self.url}, {shop.product_title_class, shop.product_price_class}, {resp.status_code}')
-            resp = requests.get(self.url, headers=user_agent, proxies=self.set_proxy())
 
         try:
             resp.encoding = resp.apparent_encoding
