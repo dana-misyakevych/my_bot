@@ -30,7 +30,7 @@ class Product:
         user_agent = Headers(headers=True).generate()
         user_agent['Accept-Encoding'] = 'identity'
         # resp = requests.get(self.url, headers=user_agent)
-        resp = requests.get(self.url, headers=user_agent, proxies=self.set_proxy())
+        resp = requests.get(self.url, headers=user_agent)
 
         if not resp.ok:
             user_agent = Headers(headers=True).generate()
