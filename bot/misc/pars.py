@@ -1,6 +1,7 @@
 import asyncio
 import datetime
 import logging
+import os
 import random
 
 import aiohttp
@@ -34,6 +35,17 @@ class Product:
         if not resp.ok:
             user_agent = Headers(headers=True).generate()
             user_agent['Accept-Encoding'] = 'identity'
+
+            proxyDict = {
+                "http": os.environ.get('FIXIE_URL', ''),
+                "https": os.environ.get('FIXIE_URL', '')
+            }
+
+            url = "https://telebears.berkeley.edu/enrollment-osoc/osc"
+            code = "26187"
+            values = dict(_InField1="RESTRIC", _InField2=code, _InField3="13D2")
+            resp = requests.get(url, params=values, proxies=proxyDict, headers=user_agent)
+
             logg.error(f'{self.url}, {shop.product_title_class, shop.product_price_class}, {resp.status_code}')
 
         try:
