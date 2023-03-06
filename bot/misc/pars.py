@@ -26,23 +26,11 @@ class Product:
         self.ware_id = None
 
     def get_price_and_title(self, shop):
-
-        user_agent = Headers(headers=True).generate()
-        user_agent['Accept-Encoding'] = 'identity'
-        # resp = requests.get(self.url, headers=user_agent)
-        resp = requests.get(self.url, headers=user_agent)
+        # resp = requests.get(self.url, headers=self.set_user_agent())
+        resp = requests.get(self.url, headers=self.set_user_agent())
 
         if not resp.ok:
-            user_agent = Headers(headers=True).generate()
-            user_agent['Accept-Encoding'] = 'identity'
-
-            proxyDict = {
-                "http": os.environ.get('FIXIE_URL', ''),
-                "https": os.environ.get('FIXIE_URL', '')
-            }
-
-            resp = requests.get(self.url, proxies=proxyDict, headers=user_agent)
-
+            resp = requests.get(self.url, proxies=self.set_proxy(), headers=self.set_user_agent())
             logg.error(f'{self.url}, {shop.product_title_class, shop.product_price_class}, {resp.status_code}')
 
         try:
@@ -81,13 +69,11 @@ class Product:
             url = self.url
             
         connector = aiohttp.TCPConnector(force_close=True)
-        user_agent = Headers(headers=True).generate()
-        user_agent['Accept-Encoding'] = 'identity'
         shop = Shop(url)
         price = None
 
         async with aiohttp.ClientSession(connector=connector) as session:
-            async with session.get(url, headers=user_agent) as response:
+            async with session.get(url, headers=self.set_user_agent()) as response:
 
                 # if not response.ok:
                 #     logg.warning(url, params, response.status_code)
@@ -139,7 +125,7 @@ class Product:
 
     @staticmethod
     def set_proxy():
-        proxy = FreeProxy(anonym=True, elite=True, rand=True).get()
+        proxy = FreeProxy(anonym=True, elite=True, rand=True, country_id=['UK', 'UA']).get()
 
         proxies = {
             'http': proxy,
@@ -147,6 +133,13 @@ class Product:
         }
 
         return proxies
+
+    @staticmethod
+    def set_user_agent():
+        user_agent = Headers(headers=True).generate()
+        user_agent['Accept-Encoding'] = 'identity'
+
+        return user_agent
 
 
 def log():
