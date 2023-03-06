@@ -26,7 +26,7 @@ dp = Dispatcher(bot, storage=MemoryStorage())
 
 WEBHOOK_PORT = 8080
 
-WEBHOOK_HOST = 'https://tsinovyk.herokuapp.com/'
+WEBHOOK_HOST = str(os.getenv('WEBHOOK_HOST', 5000))
 WEBHOOK_PATH = ''
 WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
 

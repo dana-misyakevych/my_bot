@@ -145,7 +145,7 @@ class Shop:
 
         if not domain:
             domain = tldextract.extract(url).domain
-
+        print(domain)
         params = stores_info.get(domain)
 
         if not params:
