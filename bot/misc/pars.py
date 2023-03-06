@@ -23,7 +23,7 @@ class Product:
         self.product_title = None
         self.ware_id = None
 
-    def get_price_and_title(self, shop):
+    async def get_price_and_title(self, shop):
 
         user_agent = Headers(headers=True).generate()
         user_agent['Accept-Encoding'] = 'identity'
