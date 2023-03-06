@@ -28,7 +28,7 @@ class Product:
         user_agent = Headers(headers=True).generate()
         user_agent['Accept-Encoding'] = 'identity'
         connector = aiohttp.TCPConnector(force_close=True)
-
+        print(user_agent)
         async with aiohttp.ClientSession(connector=connector) as session:
             async with session.get(self.url, headers=user_agent) as response:
 
