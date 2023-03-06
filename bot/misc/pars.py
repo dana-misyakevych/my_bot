@@ -130,7 +130,7 @@ class Product:
 
     @staticmethod
     def set_proxy():
-        proxy = FreeProxy(anonym=True, elite=True).get()
+        proxy = FreeProxy(anonym=True, elite=True, rand=True).get()
 
         proxies = {
             'http': proxy,
