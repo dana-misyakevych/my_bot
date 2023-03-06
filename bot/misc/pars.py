@@ -32,6 +32,8 @@ class Product:
         resp = requests.get(self.url, headers=user_agent, proxies=self.set_proxy())
 
         if not resp.ok:
+            user_agent = Headers(headers=True).generate()
+            user_agent['Accept-Encoding'] = 'identity'
             logg.error(f'{self.url}, {shop.product_title_class, shop.product_price_class}, {resp.status_code}')
 
         try:
@@ -128,7 +130,7 @@ class Product:
 
     @staticmethod
     def set_proxy():
-        proxy = FreeProxy(anonym=True).get()
+        proxy = FreeProxy(anonym=True, elite=True).get()
 
         proxies = {
             'http': proxy,
