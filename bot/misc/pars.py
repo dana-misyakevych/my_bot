@@ -32,8 +32,7 @@ class Product:
 
         if not resp.ok:
             logg.error(f'{self.url}, {shop.product_title_class, shop.product_price_class}, {resp.status_code}')
-            proxy = FreeProxy(anonym=True).get()
-            resp = requests.get(self.url, headers=user_agent, proxies=proxy)
+            resp = requests.get(self.url, headers=user_agent, proxies=self.set_proxy())
 
         try:
             resp.encoding = resp.apparent_encoding
@@ -126,6 +125,17 @@ class Product:
                 code, message = 200, _('Started following 🫡')
 
         return code, message
+
+    @staticmethod
+    def set_proxy():
+        proxy = FreeProxy(anonym=True).get()
+
+        proxies = {
+            'http': proxy,
+            'https': proxy
+        }
+
+        return proxies
 
 
 def log():
