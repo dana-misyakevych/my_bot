@@ -27,8 +27,8 @@ class Product:
     def get_price_and_title(self, shop):
         resp = requests.get(self.url, headers=self.set_user_agent())
 
-        print(resp.ok)
         if not resp.ok:
+            print('sad')
             resp = requests.get(self.url, proxies=self.set_proxy(), headers=self.set_user_agent())
             logg.error(f'{self.url}, {shop.product_title_class, shop.product_price_class}, {resp.status_code}')
 
