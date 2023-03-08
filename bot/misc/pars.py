@@ -26,7 +26,7 @@ class Product:
 
     def get_price_and_title(self, shop):
 
-        resp = requests.get(self.url, proxies=self.set_proxy(), headers=self.set_user_agent())
+        resp = requests.get(self.url, headers=self.set_user_agent())
 
         if not resp.ok:
             resp = requests.get(self.url, proxies=self.set_proxy(), headers=self.set_user_agent())
