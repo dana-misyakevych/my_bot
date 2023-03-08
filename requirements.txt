@@ -1,6 +1,7 @@
 aiogram
 Babel
 aiohttp
+pyvpn
 matplotlib
 free-proxy
 beautifulsoup4==4.11.1
