@@ -10,7 +10,6 @@ from bs4 import BeautifulSoup
 from fake_headers import Headers
 from fp.fp import FreeProxy
 
-from pyvpn import PyVpn
 from bot.data.texts import reply_to_start_tracking
 from bot.database.models.goods import OrdersPrices, Url, User, Order, UsersOrders
 from bot.misc.functions import Shop, my_hash, clear_price
@@ -29,10 +28,8 @@ class Product:
         resp = requests.get(self.url, headers=self.set_user_agent())
 
         if not resp.ok:
-            vpn = self.set_proxy()
-            resp = requests.get(self.url, proxies=vpn, headers=self.set_user_agent())
+            resp = requests.get(self.url, proxies=self.set_proxy(), headers=self.set_user_agent())
             logg.error(f'{self.url}, {shop.product_title_class, shop.product_price_class}, {resp.status_code}')
-            vpn.stop()
 
         try:
             resp.encoding = resp.apparent_encoding
@@ -126,12 +123,13 @@ class Product:
 
     @staticmethod
     def set_proxy():
-        vpn = PyVpn(debug=False)
+        proxy = FreeProxy(anonym=True).get()
 
-        vpn.start()
+        proxies = {
+            'http': proxy,
+        }
 
-        return vpn
-
+        return proxies
 
     @staticmethod
     def set_user_agent():
