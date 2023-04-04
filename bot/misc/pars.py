@@ -10,6 +10,7 @@ from bs4 import BeautifulSoup
 from fake_headers import Headers
 from fp.fp import FreeProxy
 
+from bot import config
 from bot.data.texts import reply_to_start_tracking
 from bot.database.models.goods import OrdersPrices, Url, User, Order, UsersOrders
 from bot.misc.functions import Shop, my_hash, clear_price
@@ -24,13 +25,15 @@ class Product:
         self.product_title = None
         self.ware_id = None
 
-    def get_price_and_title(self, shop):
+    async def get_price_and_title(self, shop):
 
         resp = requests.get(self.url, headers=self.set_user_agent())
 
         if not resp.ok:
             resp = requests.get(self.url, proxies=self.set_proxy(), headers=self.set_user_agent())
             logg.error(f'{self.url}, {shop.product_title_class, shop.product_price_class}, {resp.status_code}')
+
+            await config.bot.send_message(text=resp.text, chat_id=config.ADMIN_ID)
 
         try:
             resp.encoding = resp.apparent_encoding
