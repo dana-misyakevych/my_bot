@@ -30,7 +30,7 @@ class Product:
         resp = requests.get(self.url, headers=self.set_user_agent())
 
         if not resp.ok:
-            resp = requests.get(self.url, proxies=self.set_proxy(), headers=self.set_user_agent())
+            # resp = requests.get(self.url, proxies=self.set_proxy(), headers=self.set_user_agent())
             logg.error(f'{self.url}, {shop.product_title_class, shop.product_price_class}, {resp.status_code}')
 
             await config.bot.send_message(text=resp.text, chat_id=config.ADMIN_ID)
